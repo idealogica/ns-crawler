@@ -5,6 +5,6 @@
 
 use Doctrine\ORM\EntityManager;
 
-include '../bootstrap.php';
+require '../bootstrap.php';
 
 return $entityManager->getConnection();

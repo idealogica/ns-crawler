@@ -4,8 +4,8 @@ use Doctrine\ORM\ORMSetup;
 
 error_reporting(E_ALL & ~E_DEPRECATED);
 
-include 'config.php';
-include 'vendor/autoload.php';
+require_once 'config.php';
+require_once 'vendor/autoload.php';
 
 $config = ORMSetup::createAnnotationMetadataConfiguration(
     paths: array(__DIR__ . "/model"),

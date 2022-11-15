@@ -6,7 +6,7 @@ restart: docker-down docker-up
 
 docker-up:
 	docker-compose -f docker-compose.yml -p ns-crawler up --build -d
-	@echo "* OK! Now let's open this link https://proxy.front in a browser"
+	@echo "OK!"
 docker-up-clean:
 	docker-compose -f docker-compose.yml build --no-cache
 	docker-compose -f docker-compose.yml -p ns-crawler up -d
@@ -24,7 +24,14 @@ docker-ssh-mysql:
 
 run:
 	docker exec -ti ns-crawler-services-php /usr/local/bin/php /app/ns-crawler.php
+migrate-db:
+	docker exec -ti ns-crawler-services-php /bin/sh -c 'cd "migrations" && /usr/local/bin/php /root/.composer/vendor/bin/doctrine migrations:migrate'
 deploy:
-	cd /app
 	git pull origin master
-	
+	make migrate-db
+init:
+	apt install docker
+	make docker-up
+	make migrate-db
+
+

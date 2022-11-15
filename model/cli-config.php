@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Symfony\Component\Console\Helper\QuestionHelper;
 
-include '../bootstrap.php';
+require '../bootstrap.php';
 
 $helperSet = ConsoleRunner::createHelperSet($entityManager);
 

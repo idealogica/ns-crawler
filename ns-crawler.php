@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Idealogica\NsCrawler\Messenger\TelegramPropertyMessenger;
 use Idealogica\NsCrawler\Source\SasomangePropertySource;
 
-include 'bootstrap.php';
+require_once 'bootstrap.php';
 
 $silent = $argv[1] ?? null;
 
