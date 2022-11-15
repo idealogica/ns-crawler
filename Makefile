@@ -26,12 +26,16 @@ run:
 	docker exec -ti ns-crawler-services-php /usr/local/bin/php /app/ns-crawler.php
 migrate-db:
 	docker exec -ti ns-crawler-services-php /bin/sh -c 'cd "migrations" && /usr/local/bin/php /root/.composer/vendor/bin/doctrine migrations:migrate'
+composer-update:
+	docker exec -ti ns-crawler-services-php /bin/sh -c '/usr/local/bin/php /usr/local/bin/composer install -o'
 deploy:
 	git pull origin master
+	make composer-update
 	make migrate-db
 init:
 	apt install docker
 	make docker-up
+	make composer-update
 	make migrate-db
 
 
