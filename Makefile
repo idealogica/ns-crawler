@@ -38,4 +38,3 @@ init:
 	make composer-update
 	make migrate-db
 
-

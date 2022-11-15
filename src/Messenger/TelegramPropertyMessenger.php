@@ -67,8 +67,8 @@ class TelegramPropertyMessenger extends AbstractMessenger
             // phone number and viber link
 
             foreach ($property->getPhoneNumbers() as $phoneNumber) {
-                $this->sendMessage($phoneNumber);
-                $this->sendMessage('viber://chat/?number=' . urlencode($phoneNumber));
+                $viberLink = 'viber://chat/?number=' . urlencode($phoneNumber);
+                $this->sendMessage('[' . $viberLink . '](' . $viberLink . ')');
             }
 
             // additional images
@@ -106,6 +106,7 @@ class TelegramPropertyMessenger extends AbstractMessenger
                 'chat_id' => $this->tgChatId,
                 'text'    => $message,
                 'parse_mode' => 'markdown',
+                'disable_web_page_preview' => true,
             ]);
         });
     }

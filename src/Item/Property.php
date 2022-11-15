@@ -322,10 +322,15 @@ class Property implements ItemInterface
         if ($this->getDistrict()) {
             $string .= "\n*District*: " . $this->getDistrict();
         }
+        $phoneNumberLinks = [];
+        foreach ($this->getPhoneNumbers() as $phoneNumber) {
+            $phoneNumberLinks[] = '[' . $phoneNumber . '](tel:' . $phoneNumber .  ')';
+        }
         $string .= sprintf(
-            "\n*Price*: %s\n*Date*: %s\n\n%s",
+            "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s",
             $this->getPrice() . 'EUR',
             $this->getDate()->format('Y-m-d'),
+            implode(', ', $phoneNumberLinks),
             $this->getDescription()
         );
         return $string;
