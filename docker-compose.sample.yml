@@ -1,9 +1,5 @@
 version: "3.7"
 
-networks:
-  main:
-    name: main_network
-
 volumes:
   dbdata:
 
@@ -19,8 +15,6 @@ services:
       - ./:/app
     depends_on:
       - services-mysql
-    networks:
-      - main
     container_name: ns-crawler-services-php
 
   services-mysql:
@@ -37,6 +31,4 @@ services:
       MYSQL_PASSWORD: sample
       MYSQL_ROOT_HOST: 127.0.0.1
       MYSQL_ROOT_PASSWORD: sample
-    networks:
-      - main
     container_name: ns-crawler-services-mysql
