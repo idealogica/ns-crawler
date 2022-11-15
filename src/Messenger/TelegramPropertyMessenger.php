@@ -67,6 +67,9 @@ class TelegramPropertyMessenger extends AbstractMessenger
             // phone number and viber link
 
             foreach ($property->getPhoneNumbers() as $phoneNumber) {
+                if (preg_match('#^[0-9]+/#i', $phoneNumber)) {
+                    continue;
+                }
                 $viberLink = 'viber://chat/?number=' . urlencode($phoneNumber);
                 $this->sendMessage('[' . $viberLink . '](' . $viberLink . ')');
             }

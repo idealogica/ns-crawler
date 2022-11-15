@@ -12,6 +12,14 @@ require_once 'bootstrap.php';
 
 $silent = $argv[1] ?? null;
 
+$running = exec("ps aux | grep " . basename(__FILE__) . " | grep -v grep | wc -l");
+if ($running > 1) {
+    if (! $silent) {
+        echo PHP_EOL . "ALREADY RUNNING" . PHP_EOL;
+    }
+    exit(0);
+}
+
 $sasomangeErrors = [];
 $sasomangeSource = new SasomangePropertySource($entityManager);
 $properties = $sasomangeSource->fetchItems($sasomangeErrors);

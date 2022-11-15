@@ -39,4 +39,4 @@ init:
 	make docker-up
 	make composer-update
 	make migrate-db
-	(sudo crontab -l ; echo "* * * * *  cd /app && /usr/bin/make run-silent") | sort - | uniq - | sudo crontab -
+	(sudo crontab -l ; echo "*/2 * * * *  cd /app && /usr/bin/make run-silent") | sort - | uniq - | sudo crontab -
