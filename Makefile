@@ -24,3 +24,7 @@ docker-ssh-mysql:
 
 run:
 	docker exec -ti ns-crawler-services-php /usr/local/bin/php /app/ns-crawler.php
+deploy:
+	cd /app
+	git pull origin master
+	
