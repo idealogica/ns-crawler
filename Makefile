@@ -14,7 +14,6 @@ docker-pull:
 	docker-compose -f docker-compose.yml pull
 docker-down:
 	docker-compose -f docker-compose.yml down --remove-orphans
-# Down with clear volumes
 docker-down-clear:
 	docker-compose -f docker-compose.yml down -v --remove-orphans
 docker-ssh-php:
@@ -39,4 +38,4 @@ init:
 	make docker-up
 	make composer-update
 	make migrate-db
-	(sudo crontab -l ; echo "* * * * *  cd /app && /usr/bin/make run-silent") | sort - | uniq - | sudo crontab -
+	# (sudo crontab -l ; echo "* * * * *  cd /app && /usr/bin/make run-silent") | sort - | uniq - | sudo crontab -
