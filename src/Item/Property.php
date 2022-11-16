@@ -323,7 +323,7 @@ class Property implements ItemInterface
      */
     public function __toString()
     {
-        $string = sprintf("%s\n", $this->prepareMarkdown($this->getTitle()));
+        $string = sprintf("%s\n\n*ID*: %s", $this->prepareMarkdown($this->getTitle()), $this->getId());
         if ($this->getLocation()) {
             $string .= "\n*Location*: " . $this->getLocation();
         }
