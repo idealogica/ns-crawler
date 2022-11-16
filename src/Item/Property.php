@@ -3,6 +3,8 @@ namespace Idealogica\NsCrawler\Item;
 
 class Property implements ItemInterface
 {
+    private string $sourceName;
+
     private string $id;
 
     private string $link;
@@ -11,7 +13,7 @@ class Property implements ItemInterface
 
     private string $title;
 
-    private string $location;
+    private ?string $location = null;
 
     private ?string $roomsNumber = null;
 
@@ -30,6 +32,25 @@ class Property implements ItemInterface
     private ?\DateTime $date;
 
     private array $phoneNumbers;
+
+    /**
+     * @return string
+     */
+    public function getSourceName(): string
+    {
+        return $this->sourceName;
+    }
+
+    /**
+     * @param string $sourceName
+     *
+     * @return Property
+     */
+    public function setSourceName(string $sourceName): Property
+    {
+        $this->sourceName = $sourceName;
+        return $this;
+    }
 
     /**
      * @return string
@@ -108,19 +129,19 @@ class Property implements ItemInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getLocation(): string
+    public function getLocation(): ?string
     {
         return $this->location;
     }
 
     /**
-     * @param string $location
+     * @param null|string $location
      *
      * @return Property
      */
-    public function setLocation(string $location): Property
+    public function setLocation(?string $location): Property
     {
         $this->location = $location;
         return $this;
@@ -302,11 +323,10 @@ class Property implements ItemInterface
      */
     public function __toString()
     {
-        $string = sprintf(
-            "%s\n\n*Location*: %s",
-            $this->getTitle(),
-            $this->getLocation()
-        );
+        $string = sprintf("%s\n", $this->prepareMarkdown($this->getTitle()));
+        if ($this->getLocation()) {
+            $string .= "\n*Location*: " . $this->getLocation();
+        }
         if ($this->getRoomsNumber()) {
             $string .= "\n*Rooms number*: " . $this->getRoomsNumber();
         }
@@ -331,8 +351,18 @@ class Property implements ItemInterface
             $this->getPrice() . 'EUR',
             $this->getDate()->format('Y-m-d'),
             implode(', ', $phoneNumberLinks),
-            $this->getDescription()
+            $this->prepareMarkdown($this->getDescription())
         );
         return $string;
+    }
+
+    /**
+     * @param string $markdown
+     *
+     * @return string
+     */
+    private function prepareMarkdown(string $markdown): string
+    {
+        return preg_replace('#[*\[\]_`]#', '', $markdown);
     }
 }

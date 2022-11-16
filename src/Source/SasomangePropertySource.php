@@ -18,7 +18,7 @@ class SasomangePropertySource extends AbstractSource
 
     const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=location%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-liman-1%2Clocation%3Anovi-sad-opstina-novi-sad-liman-2%2Clocation%3Anovi-sad-opstina-novi-sad-liman-3%2Cstatus%3AACTIVE%2Cflat_furnished_to_rent%3AName%25C5%25A1teno%2Cflat_furnished_to_rent%3APoluname%25C5%25A1teno%2CpriceValue%3A%28%2A-900%29%2Cfacility_area_range_flat_rent%3A%2836-%2A%29';
 
-    const PROPERTIES_LIMIT = 21;
+    const PROPERTIES_LIMIT = 20;
 
     /**
      * @param array $errors
@@ -55,7 +55,7 @@ class SasomangePropertySource extends AbstractSource
 
             try {
 
-                $property = new Property();
+                $property = (new Property())->setSourceName(self::SOURCE_NAME);
 
                 // sku
 
@@ -144,7 +144,7 @@ class SasomangePropertySource extends AbstractSource
 
                     $imgJson = $this->queryJson('https://sasomange.rs/hybris/classified/v1/products/sku/' . $property->getId() . '/images');
                     if (empty($imgJson['images'])) {
-                        throw new Exception('No image section inside json');
+                        continue;
                     }
                     $images = [];
                     foreach ($imgJson['images'] as $jsonImage) {

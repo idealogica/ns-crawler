@@ -6,6 +6,7 @@
 
 use Doctrine\ORM\EntityManager;
 use Idealogica\NsCrawler\Messenger\TelegramPropertyMessenger;
+use Idealogica\NsCrawler\Source\OglasiPropertySource;
 use Idealogica\NsCrawler\Source\SasomangePropertySource;
 
 require_once 'bootstrap.php';
@@ -20,9 +21,18 @@ if ($running > 1) {
     exit(0);
 }
 
+$oglasiErrors = [];
 $sasomangeErrors = [];
+
+// parsing
+
+$oglasiSource = new OglasiPropertySource($entityManager);
+$oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
+
 $sasomangeSource = new SasomangePropertySource($entityManager);
-$properties = $sasomangeSource->fetchItems($sasomangeErrors);
+$sasomangeProperties = $sasomangeSource->fetchItems($sasomangeErrors);
+
+$properties = array_merge($oglasiProperties, $sasomangeProperties);
 
 if (! $properties) {
     if (! $silent) {
@@ -30,6 +40,8 @@ if (! $properties) {
     }
     exit (0);
 }
+
+// messaging
 
 $telegramPropertyMessenger = new TelegramPropertyMessenger(
     $entityManager,
@@ -39,6 +51,11 @@ $telegramPropertyMessenger = new TelegramPropertyMessenger(
 );
 $telegramPropertyMessenger->sendItems($properties);
 
+// error handling
+
+foreach ($oglasiErrors as $error) {
+    echo PHP_EOL . OglasiPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+}
 foreach ($sasomangeErrors as $error) {
     echo PHP_EOL . SasomangePropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
 }

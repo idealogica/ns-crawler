@@ -43,6 +43,23 @@ abstract class AbstractSource implements SourceInterface
     }
 
     /**
+     * @param string $html
+     *
+     * @return Dom
+     * @throws ChildNotFoundException
+     * @throws CircularException
+     * @throws ContentLengthException
+     * @throws LogicalException
+     * @throws StrictException
+     */
+    protected function parseHtml(string $html): Dom
+    {
+        $dom = new Dom();
+        $dom->loadStr($html);
+        return $dom;
+    }
+
+    /**
      * @param string $source
      * @param string $propertyId
      *

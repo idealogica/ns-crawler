@@ -6,7 +6,6 @@ use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Idealogica\NsCrawler\Item\Property;
 use Idealogica\NsCrawler\NetworkClientTrait;
-use Idealogica\NsCrawler\Source\SasomangePropertySource;
 use Longman\TelegramBot\Entities\ServerResponse;
 use Longman\TelegramBot\Exception\TelegramException;
 use Longman\TelegramBot\Request;
@@ -62,14 +61,21 @@ class TelegramPropertyMessenger extends AbstractMessenger
 
             // message example
 
-            $this->sendMessage('Здраво! Волео бих да видим овај стан ' . $property->getLink() . ' Када могу?');
+            $this->sendMessage('Здраво! Волео бих да видим овај стан ' . $property->getLink() . ' Када вам одговара?');
 
             // phone number and viber link
 
             foreach ($property->getPhoneNumbers() as $phoneNumber) {
-                if (preg_match('#^[0-9]+/#i', $phoneNumber)) {
-                    continue;
+                $phoneNumber = preg_replace('#[^0-9]+#', '', $phoneNumber);
+                $phoneCode = substr($phoneNumber, 3);
+                if ($phoneCode === '021') {
+                    continue; // local phone number
                 }
+                if ($phoneNumber[0] === '0') {
+                    $phoneNumber = substr($phoneNumber, 1);
+                    $phoneNumber = '381' . $phoneNumber;
+                }
+                $phoneNumber = '+' . $phoneNumber;
                 $viberLink = 'viber://chat/?number=' . urlencode($phoneNumber);
                 $this->sendMessage('[' . $viberLink . '](' . $viberLink . ')');
             }
@@ -85,7 +91,7 @@ class TelegramPropertyMessenger extends AbstractMessenger
                 }
             }
 
-            $this->updateHistory(SasomangePropertySource::SOURCE_NAME, $property->getId());
+            $this->updateHistory($property->getSourceName(), $property->getId());
 
             sleep(2); // to avoid TG rate limit
         }
