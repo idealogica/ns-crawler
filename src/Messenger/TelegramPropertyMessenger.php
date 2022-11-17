@@ -61,7 +61,7 @@ class TelegramPropertyMessenger extends AbstractMessenger
 
             // message example
 
-            $this->sendMessage('Здраво! Волео бих да видим овај стан ' . $property->getLink() . ' Када вам одговара?');
+            $this->sendMessage('Zdravo! Is it still available? ' . $property->getLink());
 
             // phone number and viber link
 
