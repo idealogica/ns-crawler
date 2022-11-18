@@ -31,7 +31,7 @@ class Property implements ItemInterface
 
     private ?\DateTime $date;
 
-    private array $phoneNumbers;
+    private array $phoneNumbers = [];
 
     /**
      * @return string
@@ -350,7 +350,7 @@ class Property implements ItemInterface
             "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s",
             $this->getPrice() . 'EUR',
             $this->getDate()->format('Y-m-d'),
-            implode(', ', $phoneNumberLinks),
+            $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
             $this->prepareMarkdown($this->getDescription())
         );
         return $string;

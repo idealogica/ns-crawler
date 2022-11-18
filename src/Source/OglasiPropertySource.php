@@ -163,10 +163,9 @@ class OglasiPropertySource extends AbstractSource
                     // phone number
 
                     $phoneTag = $dom->find('div.panel-body > div > a');
-                    if (! $phoneTag->count()) {
-                        throw new Exception('No phone found ' . $property->getLink());
+                    if ($phoneTag->count()) {
+                        $property->setPhoneNumbers([trim($phoneTag[0]->innerHtml)]);
                     }
-                    $property->setPhoneNumbers([trim($phoneTag[0]->innerHtml)]);
 
                     $properties[] = $property;
                 }
