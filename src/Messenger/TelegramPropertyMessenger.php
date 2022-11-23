@@ -84,7 +84,9 @@ class TelegramPropertyMessenger extends AbstractMessenger
 
             $photoCounter = 0;
             foreach ($property->getImages() as $image) {
-                $this->sendPhoto($image);
+                try {
+                    $this->sendPhoto($image);
+                } catch (\Exception $e) {}
                 $photoCounter++;
                 if ($photoCounter >= self::PHOTO_LIMIT) {
                     break;
