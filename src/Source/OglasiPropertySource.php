@@ -104,7 +104,7 @@ class OglasiPropertySource extends AbstractSource
 
                     $descriptionTag = $product->find('p[itemprop=description]');
                     if (! $descriptionTag->count()) {
-                        throw new Exception('No description found');
+                        throw new Exception('No description found: ' . $property->getLink());
                     }
                     $property->setDescription(trim($descriptionTag[0]->innerHtml));
 
@@ -112,7 +112,7 @@ class OglasiPropertySource extends AbstractSource
 
                     $priceTag = $product->find('span[itemprop=price]');
                     if (! $priceTag->count()) {
-                        throw new Exception('No description found');
+                        throw new Exception('No price found: ' . $property->getLink());
                     }
                     $property->setPrice(trim($priceTag[0]->getAttribute('content')));
 
@@ -120,7 +120,7 @@ class OglasiPropertySource extends AbstractSource
 
                     $authorTag = $product->find('div.visible-sm small');
                     if (! $authorTag->count()) {
-                        throw new Exception('No description found');
+                        throw new Exception('No author found: ' . $property->getLink());
                     }
                     $property->setAgency((bool) preg_match('#nekretnine#i', $authorTag[0]->innerHtml));
 
