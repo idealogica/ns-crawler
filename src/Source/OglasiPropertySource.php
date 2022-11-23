@@ -112,7 +112,7 @@ class OglasiPropertySource extends AbstractSource
 
                     $priceTag = $product->find('span[itemprop=price]');
                     if (! $priceTag->count()) {
-                        throw new Exception('No price found: ' . $property->getLink());
+                        continue;
                     }
                     $property->setPrice(trim($priceTag[0]->getAttribute('content')));
 
