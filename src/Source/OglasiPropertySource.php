@@ -16,7 +16,7 @@ class OglasiPropertySource extends AbstractSource
 
     const SOURCE_NAME = 'oglasi.rs';
 
-    const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad/liman-3+liman-2+liman-1+centar-spens+centar-stari-grad+centar+podbara?pr%5Be%5D=900&pr%5Bc%5D=EUR&d%5BOpremljenost%5D%5B0%5D=Delimi%C4%8Dno+name%C5%A1ten&d%5BOpremljenost%5D%5B1%5D=Name%C5%A1ten&d%5BKvadratura%5D%5B0%5D=30&d%5BKvadratura%5D%5B1%5D=40&d%5BKvadratura%5D%5B2%5D=50&d%5BKvadratura%5D%5B3%5D=60&d%5BKvadratura%5D%5B4%5D=70&d%5BKvadratura%5D%5B5%5D=80&d%5BKvadratura%5D%5B6%5D=90&d%5BKvadratura%5D%5B7%5D=100';
+    const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad/liman-3+liman-2+liman-1+centar-spens+centar-stari-grad+centar+podbara?pr%5Be%5D=900&pr%5Bc%5D=EUR';
 
     const PROPERTIES_LIMIT = 20;
 
