@@ -16,7 +16,7 @@ class SasomangePropertySource extends AbstractSource
 
     const SOURCE_NAME = 'sasomange.rs';
 
-    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=location%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-liman-1%2Clocation%3Anovi-sad-opstina-novi-sad-liman-2%2Clocation%3Anovi-sad-opstina-novi-sad-liman-3%2Cstatus%3AACTIVE%2CpriceValue%3A%28%2A-900%29';
+    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=priceValue%3A%28%2A-900%29%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-liman-1%2Clocation%3Anovi-sad-opstina-novi-sad-liman-2%2Clocation%3Anovi-sad-opstina-novi-sad-liman-3%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica';
 
     const PROPERTIES_LIMIT = 20;
 
