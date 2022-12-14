@@ -35,6 +35,13 @@ class History
     private string $sourceId;
 
     /**
+     * @var null|\DateTime
+     *
+     * @ORM\Column(name="sentOn", type="datetime", nullable=true)
+     */
+    private ?\DateTime $sentOn = null;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="insertedOn", type="datetime", nullable=false)
@@ -99,6 +106,25 @@ class History
     }
 
     /**
+     * @return \DateTime|null
+     */
+    public function getSentOn(): ?\DateTime
+    {
+        return $this->sentOn;
+    }
+
+    /**
+     * @param \DateTime|null $sentOn
+     *
+     * @return History
+     */
+    public function setSentOn(?\DateTime $sentOn): History
+    {
+        $this->sentOn = $sentOn;
+        return $this;
+    }
+
+    /**
      * @return \DateTime
      */
     public function getInsertedOn(): \DateTime
@@ -115,5 +141,17 @@ class History
     {
         $this->insertedOn = $insertedOn;
         return $this;
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function isReadyForProcessing(): bool
+    {
+        $minutes = mt_rand(8, 14);
+        $timeDiffInterval = new \DateInterval('PT' . $minutes . 'M');
+        $timeDiffInterval->invert = 1;
+        return ! $this->getSentOn() && (new \DateTime())->add($timeDiffInterval) >= $this->getInsertedOn();
     }
 }

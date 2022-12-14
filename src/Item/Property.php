@@ -323,7 +323,11 @@ class Property implements ItemInterface
      */
     public function __toString()
     {
-        $string = sprintf("%s\n\n*ID*: %s", $this->prepareMarkdown($this->getTitle()), $this->getId());
+        $string = sprintf(
+            "%s\n\n*ID*: %s",
+            $this->prepareMarkdown($this->getTitle()),
+            $this->getId()
+        );
         if ($this->getLocation()) {
             $string .= "\n*Location*: " . $this->getLocation();
         }
@@ -331,7 +335,7 @@ class Property implements ItemInterface
             $string .= "\n*Rooms number*: " . $this->getRoomsNumber();
         }
         if ($this->getArea()) {
-            $string .= "\n*Area*: " . $this->getArea();
+            $string .= "\n*Floor area*: " . $this->getArea();
         }
         if (is_bool($this->isAgency())) {
             $string .= "\n*Agency*: " . ($this->isAgency() ? 'Yes' : 'No');
@@ -347,11 +351,12 @@ class Property implements ItemInterface
             $phoneNumberLinks[] = '[' . $phoneNumber . '](tel:' . $phoneNumber .  ')';
         }
         $string .= sprintf(
-            "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s",
+            "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s\n\n%s",
             $this->getPrice() . 'EUR',
             $this->getDate()->format('Y-m-d'),
             $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
-            $this->prepareMarkdown($this->getDescription())
+            $this->prepareMarkdown($this->getDescription()),
+            $this->getLink()
         );
         return $string;
     }

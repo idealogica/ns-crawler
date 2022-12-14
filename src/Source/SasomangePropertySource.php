@@ -16,7 +16,9 @@ class SasomangePropertySource extends AbstractSource
 
     const SOURCE_NAME = 'sasomange.rs';
 
-    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=priceValue%3A%28%2A-900%29%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-liman-1%2Clocation%3Anovi-sad-opstina-novi-sad-liman-2%2Clocation%3Anovi-sad-opstina-novi-sad-liman-3%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica';
+    // const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=priceValue%3A%28%2A-900%29%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-liman-1%2Clocation%3Anovi-sad-opstina-novi-sad-liman-2%2Clocation%3Anovi-sad-opstina-novi-sad-liman-3%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica';
+
+    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje/f/novi-sad';
 
     const PROPERTIES_LIMIT = 20;
 
@@ -65,7 +67,9 @@ class SasomangePropertySource extends AbstractSource
                 }
                 $propertyId = trim($sku);
 
-                if (! $this->isHistoryEntryExists(self::SOURCE_NAME, $propertyId)) {
+                $historyEntry = $this->addHistoryEntry(self::SOURCE_NAME, $propertyId);
+
+                if ($historyEntry->isReadyForProcessing()) {
 
                     $property->setId($propertyId);
 

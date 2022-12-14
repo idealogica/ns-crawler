@@ -1,9 +1,9 @@
 <?php
 namespace Idealogica\NsCrawler\Messenger;
 
-use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Idealogica\NsCrawler\History;
 
@@ -23,17 +23,41 @@ abstract class AbstractMessenger implements MessengerInterface
      * @param string $source
      * @param string $propertyId
      *
+     * @return AbstractMessenger
+     * @throws NonUniqueResultException
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    protected function updateHistory(string $source, string $propertyId)
+    protected function updateHistory(string $source, string $propertyId): self
     {
-        $test = new History();
-        $test
-            ->setSource($source)
-            ->setSourceId($propertyId)
-            ->setInsertedon(new DateTime());
-        $this->entityManager->persist($test);
-        $this->entityManager->flush();
+        $historyEntry = $this->isHistoryEntryExisting($source, $propertyId);
+        if ($historyEntry) {
+            $historyEntry->setSentOn(new \DateTime());
+            $this->entityManager->persist($historyEntry);
+            $this->entityManager->flush();
+        }
+        return $this;
+    }
+
+    /**
+     * @param string $source
+     * @param string $propertyId
+     *
+     * @return null|History
+     * @throws NonUniqueResultException
+     */
+    protected function isHistoryEntryExisting(string $source, string $propertyId): ?History
+    {
+        return $this->entityManager
+            ->createQueryBuilder()
+            ->select('h')
+            ->from(History::class, 'h')
+            ->where('h.source = ?0')
+            ->andWhere('h.sourceId = ?1')
+            ->setParameters([$source, $propertyId])
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
     }
 }

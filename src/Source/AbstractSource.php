@@ -2,7 +2,9 @@
 namespace Idealogica\NsCrawler\Source;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
 use Idealogica\NsCrawler\History;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
@@ -63,12 +65,35 @@ abstract class AbstractSource implements SourceInterface
      * @param string $source
      * @param string $propertyId
      *
-     * @return bool
+     * @return History
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    protected function addHistoryEntry(string $source, string $propertyId): History
+    {
+        $entry = $this->isHistoryEntryExisting($source, $propertyId);
+        if (! $entry) {
+            $entry = new History();
+            $entry
+                ->setSource($source)
+                ->setSourceId($propertyId)
+                ->setInsertedon(new \DateTime());
+            $this->entityManager->persist($entry);
+            $this->entityManager->flush();
+        }
+        return $entry;
+    }
+
+    /**
+     * @param string $source
+     * @param string $propertyId
+     *
+     * @return null|History
      * @throws NonUniqueResultException
      */
-    protected function isHistoryEntryExists(string $source, string $propertyId): bool
+    protected function isHistoryEntryExisting(string $source, string $propertyId): ?History
     {
-        return (bool) $this->entityManager
+        return $this->entityManager
             ->createQueryBuilder()
             ->select('h')
             ->from(History::class, 'h')

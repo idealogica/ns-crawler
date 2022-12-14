@@ -15,7 +15,9 @@ class OglasiPropertySource extends AbstractSource
 
     const SOURCE_NAME = 'oglasi.rs';
 
-    const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad/grbavica+liman-3+liman-2+liman-1+centar-spens+centar-stari-grad+centar+podbara?pr%5Be%5D=900&pr%5Bc%5D=EUR';
+    // const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad/grbavica+liman-3+liman-2+liman-1+centar-spens+centar-stari-grad+centar+podbara?pr%5Be%5D=900&pr%5Bc%5D=EUR';
+
+    const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad';
 
     const PROPERTIES_LIMIT = 20;
 
@@ -71,8 +73,9 @@ class OglasiPropertySource extends AbstractSource
                 }
                 $propertyId = trim($idMatches[1]);
 
+                $historyEntry = $this->addHistoryEntry(self::SOURCE_NAME, $propertyId);
 
-                if (! $this->isHistoryEntryExists(self::SOURCE_NAME, $propertyId)) {
+                if ($historyEntry->isReadyForProcessing()) {
 
                     $property->setId($propertyId);
 
