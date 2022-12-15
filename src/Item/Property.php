@@ -27,7 +27,7 @@ class Property implements ItemInterface
 
     private int $price;
 
-    private string $description;
+    private ?string $description = null;
 
     private ?\DateTime $date;
 
@@ -262,19 +262,19 @@ class Property implements ItemInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
     /**
-     * @param string $description
+     * @param null|string $description
      *
      * @return Property
      */
-    public function setDescription(string $description): Property
+    public function setDescription(?string $description): Property
     {
         $this->description = $description;
         return $this;
@@ -355,7 +355,7 @@ class Property implements ItemInterface
             $this->getPrice() . 'EUR',
             $this->getDate()->format('Y-m-d'),
             $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
-            $this->prepareMarkdown($this->getDescription()),
+            $this->getDescription() ? $this->prepareMarkdown($this->getDescription()) : '-',
             $this->getLink()
         );
         return $string;

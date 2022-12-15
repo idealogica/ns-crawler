@@ -149,7 +149,7 @@ class History
      */
     public function isReadyForProcessing(): bool
     {
-        $minutes = mt_rand(8, 14);
+        $minutes = mt_rand(5, 10);
         $timeDiffInterval = new \DateInterval('PT' . $minutes . 'M');
         $timeDiffInterval->invert = 1;
         return ! $this->getSentOn() && (new \DateTime())->add($timeDiffInterval) >= $this->getInsertedOn();
