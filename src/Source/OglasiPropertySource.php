@@ -5,6 +5,7 @@ use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Idealogica\NsCrawler\Item\Property;
 use Idealogica\NsCrawler\NetworkClientTrait;
+use PHPHtmlParser\Dom\Node\Collection;
 use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -22,6 +23,26 @@ class OglasiPropertySource extends AbstractSource
     const PROPERTIES_LIMIT = 20;
 
     /**
+     * @param string $indexUrl
+     * @param array $errors
+     *
+     * @return Collection|null
+     * @throws ChildNotFoundException
+     * @throws ClientExceptionInterface
+     * @throws NotLoadedException
+     */
+    private function getProducts(string $indexUrl, array &$errors = []): ?Collection
+    {
+        try {
+            $dom = $this->parseDom($indexUrl);
+        } catch (Exception $e) {
+            $errors[] = $e;
+            return null;
+        }
+        return $dom->find('div.advert_list_item_normalan');
+    }
+
+    /**
      * @param array $errors
      *
      * @return array
@@ -37,17 +58,16 @@ class OglasiPropertySource extends AbstractSource
 
         $origin = 'https://oglasi.rs';
 
-        try {
-            $dom = $this->parseDom(self::INDEX_URL);
-        } catch (Exception $e) {
-            $errors[] = $e;
+        $products = $this->getProducts(self::INDEX_URL, $errors);
+        if (! $products instanceof Collection) {
             return [];
         }
-
-        $products = $dom->find('div.advert_list_item_normalan');
         if (! $products->count()) {
-            $errors[] = new Exception('No products found');
-            return [];
+            $products = $this->getProducts(self::INDEX_URL . '?p=2', $errors);
+            if (! $products instanceof Collection || ! $products->count()) {
+                $errors[] = new Exception('No products found (div.advert_list_item_normalan) one the page: ' . self::INDEX_URL);
+                return [];
+            }
         }
 
         $propertiesCounter = 0;

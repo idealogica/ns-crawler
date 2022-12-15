@@ -132,7 +132,7 @@ class SasomangePropertySource extends AbstractSource
 
                     $descriptionTag = $product->find('div.description > p');
                     if (! $descriptionTag->count()) {
-                        throw new Exception('No description found');
+                        throw new Exception('No description found: ' . $property->getLink());
                     }
                     $property->setDescription(trim($descriptionTag->innerHtml));
 
