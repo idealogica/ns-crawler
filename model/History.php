@@ -149,7 +149,7 @@ class History
      */
     public function isReadyForProcessing(): bool
     {
-        return true;
+        return ! $this->getSentOn();
 
         // TODO: uncomment for production usage
 
