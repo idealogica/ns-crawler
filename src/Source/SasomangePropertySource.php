@@ -18,7 +18,9 @@ class SasomangePropertySource extends AbstractSource
 
     // const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=priceValue%3A%28%2A-900%29%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-liman-1%2Clocation%3Anovi-sad-opstina-novi-sad-liman-2%2Clocation%3Anovi-sad-opstina-novi-sad-liman-3%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica';
 
-    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje/f/novi-sad';
+    // const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje/f/novi-sad';
+
+    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=location%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-futoska%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica%2Clocation%3Anovi-sad-opstina-novi-sad-jodna-banja%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-rotkvarija%2Clocation%3Anovi-sad-opstina-novi-sad-stari-grad%2Cstatus%3AACTIVE%2Cfacility_area_range_flat_rent%3A%2885-%2A%29%2CpriceValue%3A%28%2A-1300%29';
 
     const PROPERTIES_LIMIT = 20;
 
