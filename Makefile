@@ -21,10 +21,14 @@ docker-ssh-php:
 docker-ssh-mysql:
 	docker exec -ti ns-crawler-services-mysql /bin/sh
 
-run:
+run-ns-crawler:
 	docker exec -ti ns-crawler-services-php /usr/local/bin/php /app/ns-crawler.php
-run-silent:
+run-ns-crawler-silent:
 	@docker exec -i ns-crawler-services-php /usr/local/bin/php /app/ns-crawler.php silent
+run-ds-crawler:
+	docker exec -ti ns-crawler-services-php /usr/local/bin/php /app/ds-crawler.php
+run-ds-crawler-silent:
+	@docker exec -i ns-crawler-services-php /usr/local/bin/php /app/ds-crawler.php silent
 migrate-db:
 	docker exec -ti ns-crawler-services-php /bin/sh -c 'cd "migrations" && /usr/local/bin/php /root/.composer/vendor/bin/doctrine migrations:migrate'
 composer-update:
