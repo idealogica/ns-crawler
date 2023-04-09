@@ -14,6 +14,8 @@ class PsychzServerOfferSource extends AbstractSource
 {
     use NetworkClientTrait;
 
+    const NOTIFICATION_FREQUENCY = 60;
+
     const PRICE_OFFSET = 50;
 
     const SOURCE_NAME = 'psychz.com';
@@ -104,7 +106,7 @@ class PsychzServerOfferSource extends AbstractSource
                 }
                 $date = new \DateTime();
                 $minute = $date->format('i');
-                $minute = $minute - ($minute % 10);
+                $minute = $minute - ($minute % self::NOTIFICATION_FREQUENCY);
                 $date->setTime($date->format('H'), $minute);
                 $propertyId = trim($idMatches[1] . '-' . $date->format('YmdHi'));
                 $serverOffer->setId($propertyId);

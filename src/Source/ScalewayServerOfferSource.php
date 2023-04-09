@@ -11,6 +11,8 @@ class ScalewayServerOfferSource extends AbstractSource
 {
     use NetworkClientTrait;
 
+    const NOTIFICATION_FREQUENCY = 60;
+
     const PRICE_OFFSET = 45;
 
     const SOURCE_NAME = 'scaleway.com';
@@ -227,7 +229,7 @@ class ScalewayServerOfferSource extends AbstractSource
                 }
                 $date = new \DateTime();
                 $minute = $date->format('i');
-                $minute = $minute - ($minute % 10);
+                $minute = $minute - ($minute % self::NOTIFICATION_FREQUENCY);
                 $date->setTime($date->format('H'), $minute);
                 $propertyId = trim($product['id'] . '-' . $date->format('YmdHi'));
                 $serverOffer->setId($propertyId);

@@ -13,6 +13,8 @@ use Idealogica\NsCrawler\Source\ScalewayServerOfferSource;
 
 require_once 'bootstrap.php';
 
+dd(10 % 60);
+
 $silent = $argv[1] ?? null;
 
 $running = exec("ps aux | grep " . basename(__FILE__) . " | grep -v grep | wc -l");
