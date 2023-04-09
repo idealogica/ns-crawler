@@ -47,8 +47,6 @@ if (! $serverOffers) {
     exit (0);
 }
 
-dump($serverOffers);
-
 // messaging
 
 $telegramServerOfferMessenger = new TelegramServerOfferMessenger(
