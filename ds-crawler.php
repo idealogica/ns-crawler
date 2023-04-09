@@ -7,6 +7,9 @@
 use Doctrine\ORM\EntityManager;
 use Idealogica\NsCrawler\Messenger\TelegramServerOfferMessenger;
 use Idealogica\NsCrawler\Source\MevspaceServerOfferSource;
+use Idealogica\NsCrawler\Source\PsychzOfferSource;
+use Idealogica\NsCrawler\Source\PsychzServerOfferSource;
+use Idealogica\NsCrawler\Source\ScalewayServerOfferSource;
 
 require_once 'bootstrap.php';
 
@@ -21,13 +24,21 @@ if ($running > 1) {
 }
 
 $mevspaceErrors = [];
+$scalewayErrors = [];
+$psychzErrors = [];
 
 // parsing
+
+$scalewaySource = new ScalewayServerOfferSource($entityManager);
+$scalewayServerOffers = $scalewaySource->fetchItems($scalewayErrors);
 
 $mevspaceSource = new MevspaceServerOfferSource($entityManager);
 $mevspaceServerOffers = $mevspaceSource->fetchItems($mevspaceErrors);
 
-$serverOffers = array_merge($mevspaceServerOffers, []);
+$psychzSource = new PsychzServerOfferSource($entityManager);
+$psychzServerOffers = $psychzSource->fetchItems($psychzErrors);
+
+$serverOffers = array_merge($scalewayServerOffers, $mevspaceServerOffers, $psychzServerOffers);
 
 if (! $serverOffers) {
     if (! $silent) {
@@ -35,6 +46,8 @@ if (! $serverOffers) {
     }
     exit (0);
 }
+
+dump($serverOffers);
 
 // messaging
 
@@ -48,8 +61,14 @@ $telegramServerOfferMessenger->sendItems($serverOffers);
 
 // error handling
 
+foreach ($scalewayErrors as $error) {
+    echo PHP_EOL . ScalewayServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
+}
 foreach ($mevspaceErrors as $error) {
     echo PHP_EOL . MevspaceServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
+}
+foreach ($psychzErrors as $error) {
+    echo PHP_EOL . PsychzServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
 }
 
 if (! $silent) {

@@ -10,15 +10,17 @@ use PHPHtmlParser\Exceptions\ChildNotFoundException;
 use PHPHtmlParser\Exceptions\NotLoadedException;
 use Psr\Http\Client\ClientExceptionInterface;
 
-class MevspaceServerOfferSource extends AbstractSource
+class PsychzServerOfferSource extends AbstractSource
 {
     use NetworkClientTrait;
 
-    const PRICE_OFFSET = 45;
+    const PRICE_OFFSET = 50;
 
-    const SOURCE_NAME = 'mevspace.com';
+    const SOURCE_NAME = 'psychz.com';
 
-    const INDEX_URL = 'https://mevspace.com/dedicated';
+    const INDEX_URL = 'https://www.psychz.net/dashboard/client/web/order/dedicated-server?filterId=+YiuNTK7dhKovYq/+lBQ4KqmSltPsmcZgiD18j6wgyQ=';
+
+    const ALLOWED_FILTER = 'E3-1230 v3';
 
     /**
      * @param string $indexUrl
@@ -37,7 +39,7 @@ class MevspaceServerOfferSource extends AbstractSource
             $errors[] = $e;
             return null;
         }
-        return $dom->find('li.server-card');
+        return $dom->find('tr.td-special-offer');
     }
 
     /**
@@ -54,7 +56,7 @@ class MevspaceServerOfferSource extends AbstractSource
         $errors = [];
         $serverOffers = [];
 
-        $origin = 'https://mevspace.com';
+        $origin = 'https://www.psychz.com';
 
         $products = $this->getProducts(self::INDEX_URL, $errors);
         if (! $products instanceof Collection) {
@@ -73,14 +75,11 @@ class MevspaceServerOfferSource extends AbstractSource
 
                 // price
 
-                $priceTags = $product->find('div.price span b');
+                $priceTags = $product->find('span.price');
                 if (! $priceTags->count()) {
-                    throw new Exception('No mevspace price found');
+                    throw new Exception('No psychz price found');
                 }
-                if (! preg_match('#([0-9]+\.[0-9]+)#', $priceTags[0]->innerHtml, $priceMatches)) {
-                    throw new Exception('Can not parse mevspace price');
-                }
-                $price = trim($priceMatches[1]);
+                $price = trim($priceTags->getAttribute('data-price'));
                 if ($price > self::PRICE_OFFSET) {
                     continue;
                 }
@@ -88,22 +87,19 @@ class MevspaceServerOfferSource extends AbstractSource
 
                 // link
 
-                $linkTag = $product->find('a.btn-success');
+                $linkTag = $product->find('a.test_grid');
                 if (! $linkTag->count()) {
-                    throw new Exception('No mevspace link found');
-                }
-                if ($linkTag[0]->hasAttribute('disabled')) {
-                    continue;
+                    throw new Exception('No psychz link found');
                 }
                 $linkValue = trim($linkTag[0]->getAttribute('href'));
-                if ($linkValue === '#') {
+                if (preg_match('#contact\.html$#i', $linkValue)) {
                     continue;
                 }
                 $serverOffer->setLink($origin . $linkValue);
 
                 // id
 
-                if (! preg_match('#/([0-9]+)$#', $serverOffer->getLink(), $idMatches)) {
+                if (! preg_match('#/dashboard/client/web/order/plan/([0-9]+)#i', $serverOffer->getLink(), $idMatches)) {
                     throw new Exception('No id found');
                 }
                 $date = new \DateTime();
@@ -113,20 +109,24 @@ class MevspaceServerOfferSource extends AbstractSource
                 $propertyId = trim($idMatches[1] . '-' . $date->format('YmdHi'));
                 $serverOffer->setId($propertyId);
 
+                // title
+
+                $titleTag = $product->find('td');
+                if (! $titleTag->count()) {
+                    throw new Exception('No psychz title found');
+                }
+                if (preg_match('#([^<]+)#', $titleTag[0]->innerHtml, $titleMatches)) {
+                    $serverOffer->setTitle(trim($titleMatches[0]));
+                } else {
+                    throw new Exception('Can not parse title');
+                }
+                if (! preg_match('#' . self::ALLOWED_FILTER . '#i', $serverOffer->getTitle())) {
+                    continue;
+                }
+
                 $historyEntry = $this->addHistoryEntry(self::SOURCE_NAME, $propertyId);
 
                 if ($historyEntry->isReadyForProcessing()) {
-
-                    // title
-
-                    $titleTag = $product->find('div.cpu');
-                    if (! $titleTag->count()) {
-                        throw new Exception('No mevspace title found');
-                    }
-                    if (preg_match('#([^<]+)#', $titleTag[0]->innerHtml, $titleMatches)) {
-                        $serverOffer->setTitle(trim($titleMatches[0]));
-                    }
-
                     $serverOffers[] = $serverOffer;
                 }
 
