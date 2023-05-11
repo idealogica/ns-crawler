@@ -20,7 +20,9 @@ class SasomangePropertySource extends AbstractSource
 
     // const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje/f/novi-sad';
 
-    const INDEX_URL = 'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=location%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-futoska%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica%2Clocation%3Anovi-sad-opstina-novi-sad-jodna-banja%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-rotkvarija%2Clocation%3Anovi-sad-opstina-novi-sad-stari-grad%2Cstatus%3AACTIVE%2Cfacility_area_range_flat_rent%3A%2885-%2A%29%2CpriceValue%3A%28%2A-1300%29';
+    const INDEX_URL = [
+        'https://sasomange.rs/c/stanovi-iznajmljivanje?productsFacets.facets=location%3Anovi-sad-opstina-novi-sad-centar%2Clocation%3Anovi-sad-opstina-novi-sad-futoska%2Clocation%3Anovi-sad-opstina-novi-sad-grbavica%2Clocation%3Anovi-sad-opstina-novi-sad-jodna-banja%2Clocation%3Anovi-sad-opstina-novi-sad-podbara%2Clocation%3Anovi-sad-opstina-novi-sad-rotkvarija%2Clocation%3Anovi-sad-opstina-novi-sad-stari-grad%2Cstatus%3AACTIVE%2Cfacility_area_range_flat_rent%3A%2885-%2A%29%2CpriceValue%3A%28%2A-1300%29'
+    ];
 
     const PROPERTIES_LIMIT = 20;
 
@@ -40,144 +42,148 @@ class SasomangePropertySource extends AbstractSource
 
         $origin = 'https://sasomange.rs';
 
-        try {
-            $dom = $this->parseDom(self::INDEX_URL);
-        } catch (Exception $e) {
-            $errors[] = $e;
-            return [];
-        }
-
-        $products = $dom->find('li.product-grid-view');
-        if (! $products->count()) {
-            $errors[] = new Exception('No products found');
-            return [];
-        }
-
-        $propertiesCounter = 0;
-
-        foreach ($products as $product) {
+        foreach (self::INDEX_URL as $indexUrl) {
 
             try {
-
-                $property = (new Property())->setSourceName(self::SOURCE_NAME);
-
-                // sku
-
-                $sku = $product->getAttribute('data-sku');
-                if (! $sku) {
-                    throw new Exception('No sku found');
-                }
-                $propertyId = trim($sku);
-
-                $historyEntry = $this->addHistoryEntry(self::SOURCE_NAME, $propertyId);
-
-                if ($historyEntry->isReadyForProcessing()) {
-
-                    $property->setId($propertyId);
-
-                    // link
-
-                    $linkTag = $product->find('a.product-link');
-                    if (! $linkTag->count()) {
-                        throw new Exception('No link found');
-                    }
-                    $property->setLink($origin . trim($linkTag[0]->href));
-
-                    // title
-
-                    $titleTag = $product->find('h3.product-title');
-                    if (! $titleTag->count()) {
-                        throw new Exception('No title found');
-                    }
-                    $property->setTitle(trim($titleTag[0]->innerHtml));
-
-                    // location
-
-                    $locationTag = $product->find('div.top-section div.pin-item span');
-
-                    if (! $locationTag->count()) {
-                        throw new Exception('No location found');
-                    }
-                    $property->setLocation(trim($locationTag->innerHtml));
-
-                    // attributes
-
-                    $attrsTag = $product->find('ul.highlighted-attributes span');
-                    if ($attrsTag[0]) {
-                        $property->setRoomsNumber(trim($attrsTag[0]->innerHtml));
-                    }
-                    if ($attrsTag[1]) {
-                        $property->setArea(trim($attrsTag[1]->innerHtml));
-                    }
-                    if ($attrsTag[2]) {
-                        $property->setAgency(trim($attrsTag[2]->innerHtml) === 'Agencija');
-                    }
-                    if ($attrsTag[3]) {
-                        $property->setFurnished(trim($attrsTag[3]->innerHtml) === 'Namešteno');
-                    }
-                    if ($attrsTag[4]) {
-                        $property->setDistrict(trim($attrsTag[4]->innerHtml));
-                    }
-
-                    // price
-
-                    $priceTag = $product->find('p.product-price');
-                    if (! $priceTag->count()) {
-                        throw new Exception('No price found');
-                    }
-                    if (! preg_match('#^([0-9]+)#', trim($priceTag->innerHtml), $pm)) {
-                        throw new Exception('Could not parse price');
-                    }
-                    $property->setPrice((int) $pm[1]);
-
-                    // description
-
-                    $descriptionTag = $product->find('div.description > p');
-                    if ($descriptionTag->count()) {
-                        $property->setDescription(trim($descriptionTag->innerHtml));
-                    }
-
-                    // date
-
-                    $dateTag = $product->find('div.description > time.pin-item span');
-                    if (! $dateTag->count()) {
-                        throw new Exception('No date found');
-                    }
-                    $property->setDate(new DateTime(trim($dateTag->innerHtml)));
-
-                    // images
-
-                    $imgJson = $this->queryJson('https://sasomange.rs/hybris/classified/v1/products/sku/' . $property->getId() . '/images');
-                    if (empty($imgJson['images'])) {
-                        continue;
-                    }
-                    $images = [];
-                    foreach ($imgJson['images'] as $jsonImage) {
-                        if (! empty($jsonImage['url'])) {
-                            $images[] = trim($jsonImage['url']);
-                        }
-                    }
-                    $property->setImages($images);
-
-                    // phone numbers
-
-                    $phonesJson = $this->queryJson('https://sasomange.rs/hybris/classified/v1/products/sku/' . $property->getId() . '/phone-numbers');
-                    if (empty($phonesJson['phoneNumbers'])) {
-                        throw new Exception('No phoneNumbers section inside json');
-                    }
-                    $property->setPhoneNumbers($phonesJson['phoneNumbers']);
-
-                    $properties[] = $property;
-
-                }
-
-                $propertiesCounter++;
-                if ($propertiesCounter >= self::PROPERTIES_LIMIT) {
-                    break;
-                }
-
+                $dom = $this->parseDom($indexUrl);
             } catch (Exception $e) {
                 $errors[] = $e;
+                return [];
+            }
+
+            $products = $dom->find('li.product-grid-view');
+            if (! $products->count()) {
+                $errors[] = new Exception('No products found');
+                return [];
+            }
+
+            $propertiesCounter = 0;
+
+            foreach ($products as $product) {
+
+                try {
+
+                    $property = (new Property())->setSourceName(self::SOURCE_NAME);
+
+                    // sku
+
+                    $sku = $product->getAttribute('data-sku');
+                    if (! $sku) {
+                        throw new Exception('No sku found');
+                    }
+                    $propertyId = trim($sku);
+
+                    $historyEntry = $this->addHistoryEntry(self::SOURCE_NAME, $propertyId);
+
+                    if ($historyEntry->isReadyForProcessing()) {
+
+                        $property->setId($propertyId);
+
+                        // link
+
+                        $linkTag = $product->find('a.product-link');
+                        if (! $linkTag->count()) {
+                            throw new Exception('No link found');
+                        }
+                        $property->setLink($origin . trim($linkTag[0]->href));
+
+                        // title
+
+                        $titleTag = $product->find('h3.product-title');
+                        if (! $titleTag->count()) {
+                            throw new Exception('No title found');
+                        }
+                        $property->setTitle(trim($titleTag[0]->innerHtml));
+
+                        // location
+
+                        $locationTag = $product->find('div.top-section div.pin-item span');
+
+                        if (! $locationTag->count()) {
+                            throw new Exception('No location found');
+                        }
+                        $property->setLocation(trim($locationTag->innerHtml));
+
+                        // attributes
+
+                        $attrsTag = $product->find('ul.highlighted-attributes span');
+                        if ($attrsTag[0]) {
+                            $property->setRoomsNumber(trim($attrsTag[0]->innerHtml));
+                        }
+                        if ($attrsTag[1]) {
+                            $property->setArea(trim($attrsTag[1]->innerHtml));
+                        }
+                        if ($attrsTag[2]) {
+                            $property->setAgency(trim($attrsTag[2]->innerHtml) === 'Agencija');
+                        }
+                        if ($attrsTag[3]) {
+                            $property->setFurnished(trim($attrsTag[3]->innerHtml) === 'Namešteno');
+                        }
+                        if ($attrsTag[4]) {
+                            $property->setDistrict(trim($attrsTag[4]->innerHtml));
+                        }
+
+                        // price
+
+                        $priceTag = $product->find('p.product-price');
+                        if (! $priceTag->count()) {
+                            throw new Exception('No price found');
+                        }
+                        if (! preg_match('#^([0-9]+)#', trim($priceTag->innerHtml), $pm)) {
+                            throw new Exception('Could not parse price');
+                        }
+                        $property->setPrice((int) $pm[1]);
+
+                        // description
+
+                        $descriptionTag = $product->find('div.description > p');
+                        if ($descriptionTag->count()) {
+                            $property->setDescription(trim($descriptionTag->innerHtml));
+                        }
+
+                        // date
+
+                        $dateTag = $product->find('div.description > time.pin-item span');
+                        if (! $dateTag->count()) {
+                            throw new Exception('No date found');
+                        }
+                        $property->setDate(new DateTime(trim($dateTag->innerHtml)));
+
+                        // images
+
+                        $imgJson = $this->queryJson('https://sasomange.rs/hybris/classified/v1/products/sku/' . $property->getId() . '/images');
+                        if (empty($imgJson['images'])) {
+                            continue;
+                        }
+                        $images = [];
+                        foreach ($imgJson['images'] as $jsonImage) {
+                            if (! empty($jsonImage['url'])) {
+                                $images[] = trim($jsonImage['url']);
+                            }
+                        }
+                        $property->setImages($images);
+
+                        // phone numbers
+
+                        $phonesJson = $this->queryJson('https://sasomange.rs/hybris/classified/v1/products/sku/' . $property->getId() . '/phone-numbers');
+                        if (empty($phonesJson['phoneNumbers'])) {
+                            throw new Exception('No phoneNumbers section inside json');
+                        }
+                        $property->setPhoneNumbers($phonesJson['phoneNumbers']);
+
+                        $properties[] = $property;
+
+                    }
+
+                    $propertiesCounter++;
+                    if ($propertiesCounter >= self::PROPERTIES_LIMIT) {
+                        break;
+                    }
+
+                } catch (Exception $e) {
+                    $errors[] = $e;
+                }
+
             }
 
         }

@@ -7,11 +7,11 @@
 use Doctrine\ORM\EntityManager;
 use Idealogica\NsCrawler\Messenger\TelegramServerOfferMessenger;
 use Idealogica\NsCrawler\Source\MevspaceServerOfferSource;
-use Idealogica\NsCrawler\Source\PsychzOfferSource;
 use Idealogica\NsCrawler\Source\PsychzServerOfferSource;
 use Idealogica\NsCrawler\Source\ScalewayServerOfferSource;
 
 require_once 'bootstrap.php';
+require_once 'config-ds.php';
 
 $silent = $argv[1] ?? null;
 

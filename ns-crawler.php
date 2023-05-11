@@ -10,6 +10,7 @@ use Idealogica\NsCrawler\Source\OglasiPropertySource;
 use Idealogica\NsCrawler\Source\SasomangePropertySource;
 
 require_once 'bootstrap.php';
+require_once 'config-ns.php';
 
 $silent = $argv[1] ?? null;
 
@@ -29,8 +30,9 @@ $sasomangeErrors = [];
 $oglasiSource = new OglasiPropertySource($entityManager);
 $oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
 
-$sasomangeSource = new SasomangePropertySource($entityManager);
-$sasomangeProperties = $sasomangeSource->fetchItems($sasomangeErrors);
+$sasomangeProperties = [];
+// $sasomangeSource = new SasomangePropertySource($entityManager);
+// $sasomangeProperties = $sasomangeSource->fetchItems($sasomangeErrors);
 
 $properties = array_merge($oglasiProperties, $sasomangeProperties);
 

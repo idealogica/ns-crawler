@@ -14,7 +14,7 @@ class MevspaceServerOfferSource extends AbstractSource
 {
     use NetworkClientTrait;
 
-    const NOTIFICATION_FREQUENCY = 15;
+    const NOTIFICATION_FREQUENCY = 60;
 
     const PRICE_OFFSET = 45;
 
