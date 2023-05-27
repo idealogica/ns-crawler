@@ -96,7 +96,7 @@ class OglasiPropertySource extends AbstractSource
                     // id
 
                     if (! preg_match('#/([0-9]+-[0-9]+)/#', $property->getLink(), $idMatches)) {
-                        throw new Exception('No id found');
+                        throw new Exception('No Oglasi id found for link: ' . $property->getLink());
                     }
                     $propertyId = trim($idMatches[1]);
 
