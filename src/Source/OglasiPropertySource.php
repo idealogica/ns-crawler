@@ -21,8 +21,8 @@ class OglasiPropertySource extends AbstractSource
     // const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad';
 
     const INDEX_URL = [
-        'https://www.oglasi.rs/nekretnine/prodaja-stanova/novi-sad/podbara+centar-spens+liman-2+centar-stari-grad+liman-1+kej+centar?pr%5Be%5D=200000&pr%5Bc%5D=EUR&d%5BSobnost%5D%5B0%5D=Trosoban&d%5BSobnost%5D%5B1%5D=Troiposoban&d%5BSobnost%5D%5B2%5D=%C4%8Cetvorosoban+i+vi%C5%A1e&d%5BKvadratura%5D%5B0%5D=60&d%5BKvadratura%5D%5B1%5D=70&d%5BKvadratura%5D%5B2%5D=80&d%5BKvadratura%5D%5B3%5D=90&d%5BKvadratura%5D%5B4%5D=100&d%5BKvadratura%5D%5B5%5D=110&d%5BNivo+u+zgradi%5D%5B0%5D=1.+sprat&d%5BNivo+u+zgradi%5D%5B1%5D=2.+sprat&d%5BNivo+u+zgradi%5D%5B2%5D=Dvori%C5%A1ni&d%5BNivo+u+zgradi%5D%5B3%5D=Prizemlje&d%5BNivo+u+zgradi%5D%5B4%5D=Suteren&d%5BNivo+u+zgradi%5D%5B5%5D=Visoko+prizemlje&d%5BTerasa%5D=1&p=4',
-        'https://www.oglasi.rs/nekretnine/prodaja-kuca/novi-sad/telep+podbara+centar-stari-grad+centar-spens+centar?pr%5Be%5D=350000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0&d%5BKvadratura%5D%5B1%5D=100'
+        'https://www.oglasi.rs/nekretnine/prodaja-stanova/novi-sad/podbara+centar-spens+liman-2+centar-stari-grad+liman-1+kej+centar?pr%5Be%5D=200000&pr%5Bc%5D=EUR&d%5BSobnost%5D%5B0%5D=Dvoiposoban&d%5BSobnost%5D%5B1%5D=Trosoban&d%5BSobnost%5D%5B2%5D=Dvosoban&d%5BSobnost%5D%5B3%5D=Troiposoban&d%5BSobnost%5D%5B4%5D=%C4%8Cetvorosoban+i+vi%C5%A1e&d%5BKvadratura%5D%5B0%5D=60&d%5BKvadratura%5D%5B1%5D=70&d%5BKvadratura%5D%5B2%5D=80&d%5BKvadratura%5D%5B3%5D=90&d%5BNivo+u+zgradi%5D%5B0%5D=1.+sprat&d%5BNivo+u+zgradi%5D%5B1%5D=2.+sprat&d%5BNivo+u+zgradi%5D%5B2%5D=3.+sprat&d%5BNivo+u+zgradi%5D%5B3%5D=Dvori%C5%A1ni&d%5BNivo+u+zgradi%5D%5B4%5D=Prizemlje&d%5BNivo+u+zgradi%5D%5B5%5D=Visoko+prizemlje&d%5BTerasa%5D=1',
+        'https://www.oglasi.rs/nekretnine/prodaja-kuca/novi-sad/telep+podbara+centar-stari-grad+centar-spens+centar?pr%5Be%5D=200000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0'
     ];
 
     const PROPERTIES_LIMIT = 20;
@@ -93,6 +93,18 @@ class OglasiPropertySource extends AbstractSource
                     }
                     $property->setLink($origin . trim($linkTag[0]->getAttribute('href')));
 
+                    // agency
+
+                    $authorTag = $product->find('div.visible-sm small');
+                    if (! $authorTag->count()) {
+                        throw new Exception('No author found: ' . $property->getLink());
+                    }
+                    // we skip ns-group
+                    if (preg_match('#ns.group#i', $authorTag[0]->innerHtml)) {
+                        continue;
+                    }
+                    $property->setAgency((bool) preg_match('#nekretnine#i', $authorTag[0]->innerHtml));
+
                     // id
 
                     if (! preg_match('#/([0-9]+-[0-9]+)/#', $property->getLink(), $idMatches)) {
@@ -144,14 +156,6 @@ class OglasiPropertySource extends AbstractSource
                             continue;
                         }
                         $property->setPrice(trim($priceTag[0]->getAttribute('content')));
-
-                        // agency
-
-                        $authorTag = $product->find('div.visible-sm small');
-                        if (! $authorTag->count()) {
-                            throw new Exception('No author found: ' . $property->getLink());
-                        }
-                        $property->setAgency((bool) preg_match('#nekretnine#i', $authorTag[0]->innerHtml));
 
                         // properties
 
