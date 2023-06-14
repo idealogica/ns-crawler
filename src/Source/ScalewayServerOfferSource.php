@@ -13,7 +13,7 @@ class ScalewayServerOfferSource extends AbstractSource
 
     const NOTIFICATION_FREQUENCY = 60;
 
-    const PRICE_OFFSET = 45;
+    const PRICE_OFFSET = 50;
 
     const SOURCE_NAME = 'scaleway.com';
 

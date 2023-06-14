@@ -42,7 +42,7 @@ $serverOffers = array_merge($scalewayServerOffers, $mevspaceServerOffers, $psych
 
 if (! $serverOffers) {
     if (! $silent) {
-        echo PHP_EOL . "NO NEW PROPERTIES :]" . PHP_EOL;
+        echo PHP_EOL . "NO NEW SERVER OFFERS :]" . PHP_EOL;
     }
     exit (0);
 }
