@@ -30,7 +30,7 @@ class KpPropertySource extends AbstractSource
      */
     private function request(string $url): string
     {
-        exec('curl "' . $url . '" 2> /dev/null', $output);
+        exec('curl -x ' . PROXY_ADDRESS . ' "' . $url . '" 2> /dev/null', $output);
         return implode(' ', $output);
     }
 
