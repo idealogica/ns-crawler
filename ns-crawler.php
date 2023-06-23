@@ -60,14 +60,21 @@ $telegramPropertyMessenger->sendItems($properties);
 
 // error handling
 
+$errorText = '';
+
 foreach ($kpErrors as $error) {
-    echo PHP_EOL . KpPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+    $errorText .= PHP_EOL . KpPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
 }
 foreach ($oglasiErrors as $error) {
-    echo PHP_EOL . OglasiPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+    $errorText .= PHP_EOL . OglasiPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
 }
 foreach ($sasomangeErrors as $error) {
-    echo PHP_EOL . SasomangePropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+    $errorText .= PHP_EOL . SasomangePropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+}
+
+if ($errorText) {
+    echo $errorText;
+    file_put_contents('ns-crawler.log', $errorText);
 }
 
 if (! $silent) {

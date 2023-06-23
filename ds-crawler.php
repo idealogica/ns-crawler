@@ -59,14 +59,21 @@ $telegramServerOfferMessenger->sendItems($serverOffers);
 
 // error handling
 
+$errorText = '';
+
 foreach ($scalewayErrors as $error) {
-    echo PHP_EOL . ScalewayServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
+    $errorText .= PHP_EOL . ScalewayServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
 }
 foreach ($mevspaceErrors as $error) {
-    echo PHP_EOL . MevspaceServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
+    $errorText .= PHP_EOL . MevspaceServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
 }
 foreach ($psychzErrors as $error) {
-    echo PHP_EOL . PsychzServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
+    $errorText .= PHP_EOL . PsychzServerOfferSource::SOURCE_NAME . ' > ' . $error->getMessage();
+}
+
+if ($errorText) {
+    echo $errorText;
+    file_put_contents('ds-crawler.log', $errorText);
 }
 
 if (! $silent) {

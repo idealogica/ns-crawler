@@ -3,3 +3,4 @@ config.php
 config-ns.php
 config-ds.php
 docker-compose.yml
+*.log
