@@ -6,6 +6,7 @@
 
 use Doctrine\ORM\EntityManager;
 use Idealogica\NsCrawler\Messenger\TelegramPropertyMessenger;
+use Idealogica\NsCrawler\Source\KpPropertySource;
 use Idealogica\NsCrawler\Source\OglasiPropertySource;
 use Idealogica\NsCrawler\Source\SasomangePropertySource;
 
@@ -22,10 +23,14 @@ if ($running > 1) {
     exit(0);
 }
 
+$kpErrors = [];
 $oglasiErrors = [];
 $sasomangeErrors = [];
 
 // parsing
+
+$kpSource = new KpPropertySource($entityManager);
+$kpProperties = $kpSource->fetchItems($kpErrors);
 
 $oglasiSource = new OglasiPropertySource($entityManager);
 $oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
@@ -34,7 +39,7 @@ $sasomangeProperties = [];
 // $sasomangeSource = new SasomangePropertySource($entityManager);
 // $sasomangeProperties = $sasomangeSource->fetchItems($sasomangeErrors);
 
-$properties = array_merge($oglasiProperties, $sasomangeProperties);
+$properties = array_merge($kpProperties, $oglasiProperties, $sasomangeProperties);
 
 if (! $properties) {
     if (! $silent) {
@@ -55,6 +60,9 @@ $telegramPropertyMessenger->sendItems($properties);
 
 // error handling
 
+foreach ($kpErrors as $error) {
+    echo PHP_EOL . KpPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+}
 foreach ($oglasiErrors as $error) {
     echo PHP_EOL . OglasiPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
 }

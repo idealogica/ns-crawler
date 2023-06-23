@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
+use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Idealogica\NsCrawler\History;
 use PHPHtmlParser\Dom;
@@ -40,13 +41,10 @@ abstract class AbstractSource implements SourceInterface
      */
     protected function parseDom(string $url): Dom
     {
+        exec('curl "' . $url . '" 2> /dev/null', $output);
+        dd(implode(' ', $output));
         $dom = new Dom();
-        $dom->loadFromUrl(
-            $url,
-            null,
-            null,
-            new Request('GET', $url, ['User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0'])
-        );
+        $dom->loadStr(implode(' ', $output));
         return $dom;
     }
 

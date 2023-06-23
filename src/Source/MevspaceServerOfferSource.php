@@ -82,7 +82,7 @@ class MevspaceServerOfferSource extends AbstractSource
                 return [];
             }
             if (! $products->count()) {
-                $errors[] = new Exception('No servers found one the page: ' . self::INDEX_URLS);
+                $errors[] = new Exception('No servers found one the page: ' . $indexUrl);
                 return [];
             }
 
