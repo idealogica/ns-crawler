@@ -27,11 +27,28 @@ class KpPropertySource extends AbstractSource
      * @param string $url
      *
      * @return string
+     * @throws Exception
      */
     private function request(string $url): string
     {
-        exec('curl -x ' . PROXY_ADDRESS . ' "' . $url . '" 2> /dev/null', $output);
-        return implode(' ', $output);
+        $command = 'curl -x ' . PROXY_ADDRESS . ' "' . $url . '" 2> /dev/null';
+        $output = [];
+        exec($command, $output);
+        $res = trim(implode(' ', $output));
+        if (! $res) {
+            $output = [];
+            exec($command, $output);
+            $res = trim(implode(' ', $output));
+            if (! $res) {
+                $output = [];
+                exec($command, $output);
+                $res = trim(implode(' ', $output));
+            }
+        }
+        if (! $res) {
+            throw new \Exception('Empty response: ' . $url);
+        }
+        return $res;
     }
 
     /**
