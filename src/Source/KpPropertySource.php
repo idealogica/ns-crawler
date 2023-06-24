@@ -126,7 +126,7 @@ class KpPropertySource extends AbstractSource
 
                         $titleTag = $productDom->find('section h1');
                         if (! $titleTag->count()) {
-                            throw new Exception('No title found');
+                            throw new Exception('No title found: ' . $property->getLink());
                         }
                         $property->setTitle(trim($titleTag[0]->innerHtml));
 
@@ -154,12 +154,27 @@ class KpPropertySource extends AbstractSource
 
                         // property text
 
-                        $text = $property->getTitle() . $property->getDescription();
+                        $text = $property->getTitle() . ' ' . $property->getDescription();
 
                         // floor area
 
                         if (preg_match('#([0-9]+)m#i', $text, $floorAreaMatches)) {
                             $property->setArea($floorAreaMatches[1]);
+                        }
+
+                        // district - blacklist
+
+                        if (preg_match('#novo[a-z]*\s+nasel[a-z]*#iu', $text)) {
+                            continue;
+                        }
+                        if (preg_match('#detelinar[a-z]*#iu', $text)) {
+                            continue;
+                        }
+                        if (preg_match('#veternik[a-z]*#iu', $text)) {
+                            continue;
+                        }
+                        if (preg_match('#(adica)|(adice)#iu', $text)) {
+                            continue;
                         }
 
                         // district
@@ -198,7 +213,7 @@ class KpPropertySource extends AbstractSource
                         }
                         preg_match('#([0-9]+\.[0-9]+)#', $priceTag[0]->innerHtml, $priceMatches);
                         if (! empty($priceMatches[1])) {
-                            $property->setPrice($priceMatches[1]);
+                            $property->setPrice(str_replace('.', '', $priceMatches[1]));
                         }
 
                         // images

@@ -10,7 +10,7 @@ use Longman\TelegramBot\Telegram;
 
 class TelegramPropertyMessenger extends AbstractTelegramMessenger
 {
-    const PHOTO_LIMIT = 6;
+    const PHOTO_LIMIT = 15;
 
     /**
      * @param Property[] $items
