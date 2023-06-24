@@ -149,7 +149,7 @@ class KpPropertySource extends AbstractSource
 
                         $titleTag = $productDom->find('section h1');
                         if (! $titleTag->count()) {
-                            file_put_contents('debug', $property->getLink() . PHP_EOL . PHP_EOL . $html);
+                            file_put_contents('debug.log', $property->getLink() . PHP_EOL . PHP_EOL . $html);
                             throw new Exception('No title found: ' . $property->getLink());
                         }
                         $property->setTitle(trim($titleTag[0]->innerHtml));
