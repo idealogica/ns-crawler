@@ -112,6 +112,12 @@ class KpPropertySource extends AbstractSource
                     }
                     $property->setLink($origin . trim($linkTag[0]->getAttribute('href')));
 
+                    // filter by link to save proxy traffic
+
+                    if ($this->isFiltered($property->getLink())) {
+                        continue;
+                    }
+
                     // id
 
                     $uri = new Uri($property->getLink());
@@ -182,16 +188,7 @@ class KpPropertySource extends AbstractSource
 
                         // district - blacklist
 
-                        if (preg_match('#novo[a-z]*\s+nasel[a-z]*#iu', $text)) {
-                            continue;
-                        }
-                        if (preg_match('#detelinar[a-z]*#iu', $text)) {
-                            continue;
-                        }
-                        if (preg_match('#veternik[a-z]*#iu', $text)) {
-                            continue;
-                        }
-                        if (preg_match('#(adica)|(adice)#iu', $text)) {
+                        if ($this->isFiltered($text)) {
                             continue;
                         }
 
@@ -272,5 +269,43 @@ class KpPropertySource extends AbstractSource
         }
 
         return $properties;
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return bool
+     */
+    private function isFiltered(string $text): bool
+    {
+        if (preg_match('#novo[a-z]*[\s\-]+nasel#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#detelinar[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#veternik#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#(adica)|(adice)#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#rumenack[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#salajk[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#petrovaradin#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#star[a-z]*[\s\-]+majur#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#avijacij[a-z]*#iu', $text)) {
+            return true;
+        }
+
+        return false;
     }
 }
