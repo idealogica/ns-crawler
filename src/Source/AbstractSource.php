@@ -17,6 +17,8 @@ use Psr\Http\Client\ClientExceptionInterface;
 
 abstract class AbstractSource implements SourceInterface
 {
+    const USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0';
+
     protected EntityManager $entityManager;
 
     /**
@@ -45,7 +47,7 @@ abstract class AbstractSource implements SourceInterface
             $url,
             null,
             null,
-            new Request('GET', $url, ['User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0'])
+            new Request('GET', $url, ['User-Agent' => self::USER_AGENT])
         );
         return $dom;
     }
