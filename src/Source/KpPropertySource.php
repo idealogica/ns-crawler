@@ -314,6 +314,9 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#satelit[a-z]*#iu', $text)) {
             return true;
         }
+        if (preg_match('#veterničk[a-z]*[\s\-]+ramp#iu', $text)) {
+            return true;
+        }
 
         return false;
     }
