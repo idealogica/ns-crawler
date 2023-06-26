@@ -305,6 +305,15 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#avijacij[a-z]*#iu', $text)) {
             return true;
         }
+        if (preg_match('#(klisi)|(klisa)#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#patrijarh[a-z]*[\s\-]+pavl#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#satelit[a-z]*#iu', $text)) {
+            return true;
+        }
 
         return false;
     }
