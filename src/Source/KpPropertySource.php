@@ -317,7 +317,15 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#veterničk[a-z]*[\s\-]+ramp#iu', $text)) {
             return true;
         }
-
+        if (preg_match('#telep[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#somborsk[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#bulevar[a-z]*[\s\-]+evrop#iu', $text)) {
+            return true;
+        }
         return false;
     }
 }
