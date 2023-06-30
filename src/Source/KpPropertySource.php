@@ -326,6 +326,9 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#bulevar[a-z]*[\s\-]+evrop#iu', $text)) {
             return true;
         }
+        if (preg_match('#tatarsko[a-z]*#iu', $text)) {
+            return true;
+        }
         return false;
     }
 }
