@@ -352,7 +352,7 @@ class Property implements ItemInterface
         }
         $string .= sprintf(
             "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s\n\n%s",
-            $this->getPrice() . 'EUR',
+            $this->getPrice() ? $this->getPrice() . 'EUR' : '-',
             $this->getDate()->format('Y-m-d'),
             $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
             $this->getDescription() ? $this->prepareMarkdown($this->getDescription()) : '-',
