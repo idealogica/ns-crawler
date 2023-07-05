@@ -25,7 +25,7 @@ class Property implements ItemInterface
 
     private ?string $district = null;
 
-    private int $price;
+    private ?int $price = null;
 
     private ?string $description = null;
 
@@ -243,19 +243,19 @@ class Property implements ItemInterface
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPrice(): int
+    public function getPrice(): ?int
     {
         return $this->price;
     }
 
     /**
-     * @param int $price
+     * @param null|int $price
      *
      * @return Property
      */
-    public function setPrice(int $price): Property
+    public function setPrice(?int $price): Property
     {
         $this->price = $price;
         return $this;
