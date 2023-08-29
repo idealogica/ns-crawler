@@ -18,13 +18,13 @@ class OglasiPropertySource extends AbstractSource
 
     // const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad/grbavica+liman-3+liman-2+liman-1+centar-spens+centar-stari-grad+centar+podbara?pr%5Be%5D=900&pr%5Bc%5D=EUR';
 
-    // const INDEX_URL = 'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad';
-
     const INDEX_URL = [
-        'https://www.oglasi.rs/nekretnine/prodaja-stanova/novi-sad/podbara+centar-spens+liman-2+centar-stari-grad+liman-1+kej+centar?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BSobnost%5D%5B0%5D=Dvoiposoban&d%5BSobnost%5D%5B1%5D=Trosoban&d%5BSobnost%5D%5B2%5D=Dvosoban&d%5BSobnost%5D%5B3%5D=Troiposoban&d%5BSobnost%5D%5B4%5D=%C4%8Cetvorosoban+i+vi%C5%A1e&d%5BKvadratura%5D%5B0%5D=60&d%5BKvadratura%5D%5B1%5D=70&d%5BKvadratura%5D%5B2%5D=80&d%5BKvadratura%5D%5B3%5D=90&d%5BNivo+u+zgradi%5D%5B0%5D=1.+sprat&d%5BNivo+u+zgradi%5D%5B1%5D=2.+sprat&d%5BNivo+u+zgradi%5D%5B2%5D=3.+sprat&d%5BNivo+u+zgradi%5D%5B3%5D=Dvori%C5%A1ni&d%5BNivo+u+zgradi%5D%5B4%5D=Prizemlje&d%5BNivo+u+zgradi%5D%5B5%5D=Visoko+prizemlje&d%5BTerasa%5D=1',
-        'https://www.oglasi.rs/nekretnine/prodaja-kuca/novi-sad/adamovicevo-naselje+salajka+telep+podbara+centar-stari-grad+centar-spens+centar?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0',
-        'https://www.oglasi.rs/nekretnine/prodaja-kuca/petrovaradin/stari-majur+ribnjak+petrovaradinska-ada?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0',
-        'https://www.oglasi.rs/nekretnine/prodaja-kuca/sremska-kamenica/gornja-kamenica+donja-kamenica+tatarsko-brdo+miseluk+bocke?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0',
+        'https://www.oglasi.rs/nekretnine/izdavanje-stanova/novi-sad?d%5BKvadratura%5D%5B0%5D=100&d%5BKvadratura%5D%5B1%5D=110&d%5BKvadratura%5D%5B2%5D=120&d%5BKvadratura%5D%5B3%5D=130&d%5BKvadratura%5D%5B4%5D=140&d%5BKvadratura%5D%5B5%5D=150',
+
+        // 'https://www.oglasi.rs/nekretnine/prodaja-stanova/novi-sad/podbara+centar-spens+liman-2+centar-stari-grad+liman-1+kej+centar?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BSobnost%5D%5B0%5D=Dvoiposoban&d%5BSobnost%5D%5B1%5D=Trosoban&d%5BSobnost%5D%5B2%5D=Dvosoban&d%5BSobnost%5D%5B3%5D=Troiposoban&d%5BSobnost%5D%5B4%5D=%C4%8Cetvorosoban+i+vi%C5%A1e&d%5BKvadratura%5D%5B0%5D=60&d%5BKvadratura%5D%5B1%5D=70&d%5BKvadratura%5D%5B2%5D=80&d%5BKvadratura%5D%5B3%5D=90&d%5BNivo+u+zgradi%5D%5B0%5D=1.+sprat&d%5BNivo+u+zgradi%5D%5B1%5D=2.+sprat&d%5BNivo+u+zgradi%5D%5B2%5D=3.+sprat&d%5BNivo+u+zgradi%5D%5B3%5D=Dvori%C5%A1ni&d%5BNivo+u+zgradi%5D%5B4%5D=Prizemlje&d%5BNivo+u+zgradi%5D%5B5%5D=Visoko+prizemlje&d%5BTerasa%5D=1',
+        // 'https://www.oglasi.rs/nekretnine/prodaja-kuca/novi-sad/adamovicevo-naselje+salajka+telep+podbara+centar-stari-grad+centar-spens+centar?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0',
+        // 'https://www.oglasi.rs/nekretnine/prodaja-kuca/petrovaradin/stari-majur+ribnjak+petrovaradinska-ada?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0',
+        // 'https://www.oglasi.rs/nekretnine/prodaja-kuca/sremska-kamenica/gornja-kamenica+donja-kamenica+tatarsko-brdo+miseluk+bocke?i=96&pr%5Be%5D=220000&pr%5Bc%5D=EUR&d%5BKvadratura%5D%5B0%5D=0',
     ];
 
     const PROPERTIES_LIMIT = 96;

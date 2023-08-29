@@ -29,8 +29,9 @@ $sasomangeErrors = [];
 
 // parsing
 
-$kpSource = new KpPropertySource($entityManager);
-$kpProperties = $kpSource->fetchItems($kpErrors);
+$kpProperties = [];
+// $kpSource = new KpPropertySource($entityManager);
+// $kpProperties = $kpSource->fetchItems($kpErrors);
 
 $oglasiSource = new OglasiPropertySource($entityManager);
 $oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
