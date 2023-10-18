@@ -32,14 +32,16 @@ abstract class AbstractTelegramMessenger extends AbstractMessenger
      * @param string $tgApiToken
      * @param string $tgBotName
      * @param string $tgChatId
+     * @param string|null $instanceName
      */
     public function __construct(
         EntityManager $entityManager,
         string $tgApiToken,
         string $tgBotName,
-        string $tgChatId
+        string $tgChatId,
+        ?string $instanceName = null
     ) {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $instanceName);
         $this->tgApiToken = $tgApiToken;
         $this->tgBotName = $tgBotName;
         $this->tgChatId = $tgChatId;

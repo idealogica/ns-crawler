@@ -8,14 +8,23 @@ use Doctrine\ORM\EntityManager;
 use Idealogica\NsCrawler\Messenger\TelegramPropertyMessenger;
 use Idealogica\NsCrawler\Source\KpPropertySource;
 use Idealogica\NsCrawler\Source\OglasiPropertySource;
-use Idealogica\NsCrawler\Source\SasomangePropertySource;
 
 require_once 'bootstrap.php';
-require_once 'config-ns.php';
 
-$silent = $argv[1] ?? null;
+$silent = false;
+$instanceName = null;
+$command = $argv[0] ?? null;
+if (! empty($argv[1])) {
+    if ($argv[1] === 'silent') {
+        $silent = true;
+        $instanceName = $argv[2] ?? null;
+    } else {
+        $instanceName = $argv[1];
+    }
+}
 
-$running = exec("ps aux | grep " . basename(__FILE__) . " | grep -v grep | wc -l");
+$procName = implode(' ', $argv);
+$running = exec('ps aux | grep "' . $procName . '" | grep -v grep | wc -l');
 if ($running > 1) {
     if (! $silent) {
         echo PHP_EOL . "ALREADY RUNNING" . PHP_EOL;
@@ -23,24 +32,31 @@ if ($running > 1) {
     exit(0);
 }
 
+require_once  'config-ns.' . ($instanceName ? $instanceName . '.' : '') . 'php';
+
 $kpErrors = [];
 $oglasiErrors = [];
-$sasomangeErrors = [];
+// $sasomangeErrors = [];
 
 // parsing
 
 $kpProperties = [];
-// $kpSource = new KpPropertySource($entityManager);
-// $kpProperties = $kpSource->fetchItems($kpErrors);
+if (KP_INDEX_URL) {
+    $kpSource = new KpPropertySource($entityManager, $instanceName);
+    $kpProperties = $kpSource->fetchItems($kpErrors);
+}
 
-$oglasiSource = new OglasiPropertySource($entityManager);
-$oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
+$oglasiProperties = [];
+if (OGLASI_INDEX_URL) {
+    $oglasiSource = new OglasiPropertySource($entityManager, $instanceName);
+    $oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
+}
 
-$sasomangeProperties = [];
+// $sasomangeProperties = [];
 // $sasomangeSource = new SasomangePropertySource($entityManager);
 // $sasomangeProperties = $sasomangeSource->fetchItems($sasomangeErrors);
 
-$properties = array_merge($kpProperties, $oglasiProperties, $sasomangeProperties);
+$properties = array_merge($kpProperties, $oglasiProperties);
 
 if (! $properties) {
     if (! $silent) {
@@ -55,7 +71,8 @@ $telegramPropertyMessenger = new TelegramPropertyMessenger(
     $entityManager,
     TG_API_TOKEN,
     TG_BOT_NAME,
-    TG_CHAT_ID
+    TG_CHAT_ID,
+    $instanceName
 );
 $telegramPropertyMessenger->sendItems($properties);
 
@@ -69,9 +86,9 @@ foreach ($kpErrors as $error) {
 foreach ($oglasiErrors as $error) {
     $errorText .= PHP_EOL . OglasiPropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
 }
-foreach ($sasomangeErrors as $error) {
-    $errorText .= PHP_EOL . SasomangePropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
-}
+// foreach ($sasomangeErrors as $error) {
+//     $errorText .= PHP_EOL . SasomangePropertySource::SOURCE_NAME . ' > ' . $error->getMessage();
+// }
 
 if ($errorText) {
     echo $errorText;

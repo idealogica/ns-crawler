@@ -16,11 +16,6 @@ class KpPropertySource extends AbstractSource
 
     const SOURCE_NAME = 'kupujemprodajem.com';
 
-    const INDEX_URL = [
-        'https://novi.kupujemprodajem.com/nekretnine-kupoprodaja/stanovi-trosobni-i-veci/pretraga?categoryId=26&groupId=236&locationId=16&priceTo=220000&currency=eur',
-        'https://novi.kupujemprodajem.com/nekretnine-kupoprodaja/stanovi-dvoiposobni/pretraga?categoryId=26&groupId=764&locationId=16&priceTo=220000&currency=eur'
-    ];
-
     const PROPERTIES_LIMIT = 30;
 
     /**
@@ -85,7 +80,7 @@ class KpPropertySource extends AbstractSource
 
         $origin = 'https://novi.kupujemprodajem.com';
 
-        foreach (self::INDEX_URL as $indexUrl) {
+        foreach (KP_INDEX_URL as $indexUrl) {
 
             $products = $this->getProducts($indexUrl, $errors);
             if (! $products instanceof Collection) {

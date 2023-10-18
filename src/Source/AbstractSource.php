@@ -21,12 +21,16 @@ abstract class AbstractSource implements SourceInterface
 
     protected EntityManager $entityManager;
 
+    private ?string $instanceName;
+
     /**
      * @param EntityManager $entityManager
+     * @param string|null $instanceName
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, ?string $instanceName = null)
     {
         $this->entityManager = $entityManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -79,6 +83,7 @@ abstract class AbstractSource implements SourceInterface
      */
     protected function addHistoryEntry(string $source, string $propertyId): History
     {
+        $propertyId = $this->getInstancePropertyId($propertyId);
         $entry = $this->isHistoryEntryExisting($source, $propertyId);
         if (! $entry) {
             $entry = new History();
@@ -99,7 +104,7 @@ abstract class AbstractSource implements SourceInterface
      * @return null|History
      * @throws NonUniqueResultException
      */
-    protected function isHistoryEntryExisting(string $source, string $propertyId): ?History
+    private function isHistoryEntryExisting(string $source, string $propertyId): ?History
     {
         return $this->entityManager
             ->createQueryBuilder()
@@ -112,5 +117,15 @@ abstract class AbstractSource implements SourceInterface
             ->setMaxResults(1)
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * @param string $propertyId
+     *
+     * @return string
+     */
+    private function getInstancePropertyId(string $propertyId): string
+    {
+        return $this->instanceName ? $this->instanceName . '-' . $propertyId : $propertyId;
     }
 }

@@ -11,12 +11,16 @@ abstract class AbstractMessenger implements MessengerInterface
 {
     protected EntityManager $entityManager;
 
+    private ?string $instanceName;
+
     /**
      * @param EntityManager $entityManager
+     * @param string|null $instanceName
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, ?string $instanceName = null)
     {
         $this->entityManager = $entityManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
@@ -30,6 +34,7 @@ abstract class AbstractMessenger implements MessengerInterface
      */
     protected function updateHistory(string $source, string $propertyId): self
     {
+        $propertyId = $this->getInstancePropertyId($propertyId);
         $historyEntry = $this->isHistoryEntryExisting($source, $propertyId);
         if ($historyEntry) {
             $historyEntry->setSentOn(new \DateTime());
@@ -46,7 +51,7 @@ abstract class AbstractMessenger implements MessengerInterface
      * @return null|History
      * @throws NonUniqueResultException
      */
-    protected function isHistoryEntryExisting(string $source, string $propertyId): ?History
+    private function isHistoryEntryExisting(string $source, string $propertyId): ?History
     {
         return $this->entityManager
             ->createQueryBuilder()
@@ -59,5 +64,15 @@ abstract class AbstractMessenger implements MessengerInterface
             ->setMaxResults(1)
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * @param string $propertyId
+     *
+     * @return string
+     */
+    private function getInstancePropertyId(string $propertyId): string
+    {
+        return $this->instanceName ? $this->instanceName . '-' . $propertyId : $propertyId;
     }
 }
