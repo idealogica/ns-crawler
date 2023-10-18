@@ -42,12 +42,18 @@ $oglasiErrors = [];
 
 $kpProperties = [];
 if (KP_INDEX_URL) {
+    if (! $silent) {
+        echo PHP_EOL . "PARSING KP: " . json_encode(KP_INDEX_URL) . PHP_EOL;
+    }
     $kpSource = new KpPropertySource($entityManager, $instanceName);
     $kpProperties = $kpSource->fetchItems($kpErrors);
 }
 
 $oglasiProperties = [];
 if (OGLASI_INDEX_URL) {
+    if (! $silent) {
+        echo PHP_EOL . "PARSING OGLASI: " . json_encode(OGLASI_INDEX_URL) . PHP_EOL;
+    }
     $oglasiSource = new OglasiPropertySource($entityManager, $instanceName);
     $oglasiProperties = $oglasiSource->fetchItems($oglasiErrors);
 }
