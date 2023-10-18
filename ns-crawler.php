@@ -73,6 +73,9 @@ if (! $properties) {
 
 // messaging
 
+if (! $silent) {
+    echo PHP_EOL . "SENDING TO TG" . PHP_EOL;
+}
 $telegramPropertyMessenger = new TelegramPropertyMessenger(
     $entityManager,
     TG_API_TOKEN,

@@ -273,6 +273,10 @@ class KpPropertySource extends AbstractSource
      */
     private function isFiltered(string $text): bool
     {
+        if (! preg_match('#stan|kuca|kuća|kuča#iu', $text)) {
+            return true;
+        }
+
         if (preg_match('#novo[a-z]*[\s\-]+nasel#iu', $text)) {
             return true;
         }
