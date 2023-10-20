@@ -104,7 +104,7 @@ class OglasiPropertySource extends AbstractSource
                     }
                     $title = trim($titleTag[0]->innerHtml);
                     // ONLY for ns-purchase
-                    if ($this->checkInstanceName('ns-purchase') && preg_match('#duplex#iu', $title)) {
+                    if ($this->checkInstanceName('ns-purchase') && preg_match('#(duplex)|(dupleks)#iu', $title)) {
                         continue;
                     }
                     $property->setTitle($title);
@@ -117,7 +117,7 @@ class OglasiPropertySource extends AbstractSource
                     }
                     $description = trim($descriptionTag[0]->innerHtml);
                     // ONLY for ns-purchase
-                    if ($this->checkInstanceName('ns-purchase') && preg_match('#duplex#iu', $description)) {
+                    if ($this->checkInstanceName('ns-purchase') && preg_match('#(duplex)|(dupleks)#iu', $description)) {
                         continue;
                     }
                     $property->setDescription($description);

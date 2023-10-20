@@ -283,7 +283,7 @@ class KpPropertySource extends AbstractSource
         if (! preg_match('#stan#iu', $text)) {
             return true;
         }
-        if (preg_match('#duplex#iu', $text)) {
+        if (preg_match('#(duplex)|(dupleks)#iu', $text)) {
             return true;
         }
 
