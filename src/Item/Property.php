@@ -350,9 +350,17 @@ class Property implements ItemInterface
         foreach ($this->getPhoneNumbers() as $phoneNumber) {
             $phoneNumberLinks[] = '[' . $phoneNumber . '](tel:' . $phoneNumber .  ')';
         }
+        $price = null;
+        $priceSqm = null;
+        if ($this->getPrice() && preg_match('#([0-9.,]+)#i', $this->getPrice(), $priceMatches)) {
+            $price = $priceMatches[1];
+            if ($this->getArea() && preg_match('#([0-9.,]+)#i', $this->getArea(), $areaMatches)) {
+                $priceSqm = (int) ($price / $areaMatches[1]);
+            }
+        }
         $string .= sprintf(
             "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s\n\n%s",
-            $this->getPrice() ? $this->getPrice() . 'EUR' : '-',
+            ($price ? $price . 'EUR' : '-') . ($priceSqm ? ' (' . $priceSqm . 'EUR/M2)' : ''),
             $this->getDate()->format('Y-m-d'),
             $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
             $this->getDescription() ? $this->prepareMarkdown($this->getDescription()) : '-',

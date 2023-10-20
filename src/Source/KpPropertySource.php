@@ -276,7 +276,10 @@ class KpPropertySource extends AbstractSource
      */
     private function isFiltered(string $text): bool
     {
-        if (! preg_match('#stan|kuca|kuća|kuča#iu', $text)) {
+        if (! preg_match('#stan#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#duplex#iu', $text)) {
             return true;
         }
 
@@ -295,7 +298,7 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#rumenack[a-z]*#iu', $text)) {
             return true;
         }
-        if (preg_match('#salajk[a-z]*#iu', $text)) {
+        if (preg_match('#salaj[ck][a-z]*#iu', $text)) {
             return true;
         }
         if (preg_match('#petrovaradin#iu', $text)) {
@@ -331,6 +334,19 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#tatarsko[a-z]*#iu', $text)) {
             return true;
         }
+        if (preg_match('#sremsk[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#du[šs]an[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#socijalno[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#sajm|sajam#iu', $text)) {
+            return true;
+        }
+
         return false;
     }
 }
