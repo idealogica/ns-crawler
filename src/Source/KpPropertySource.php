@@ -350,6 +350,9 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#sajm|sajam#iu', $text)) {
             return true;
         }
+        if (preg_match('#podbar[a-z]*#iu', $text)) {
+            return true;
+        }
 
         return false;
     }

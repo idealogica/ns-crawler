@@ -361,7 +361,7 @@ class Property implements ItemInterface
         $string .= sprintf(
             "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s\n\n%s",
             ($price ? $price . ' EUR' : '-') .
-            ($priceSqm ? (' (' . $priceSqm . ' EUR/M2' . ($priceSqm <= 2200 ? ' \xE2\x9C\x85' : '') . ')') : ''),
+            ($priceSqm ? (' (' . $priceSqm . ' EUR/M2' . ($priceSqm <= 2300 ? ' \xE2\x9C\x85' : '') . ')') : ''),
             $this->getDate()->format('Y-m-d'),
             $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
             $this->getDescription() ? $this->prepareMarkdown($this->getDescription()) : '-',
