@@ -90,11 +90,37 @@ class OglasiPropertySource extends AbstractSource
                     if (! $authorTag->count()) {
                         throw new Exception('No author found: ' . $property->getLink());
                     }
-                    // we skip ns-group
-                    if (preg_match('#ns.group#i', $authorTag[0]->innerHtml)) {
+                    // we skip ns-group ONLY for ns-purchase
+                    if ($this->checkInstanceName('ns-purchase') && preg_match('#ns.group#i', $authorTag[0]->innerHtml)) {
                         continue;
                     }
                     $property->setAgency((bool) preg_match('#nekretnine#i', $authorTag[0]->innerHtml));
+
+                    // title
+
+                    $titleTag = $product->find('a.fpogl-list-title h2');
+                    if (! $titleTag->count()) {
+                        throw new Exception('No title found');
+                    }
+                    $title = trim($titleTag[0]->innerHtml);
+                    // ONLY for ns-purchase
+                    if ($this->checkInstanceName('ns-purchase') && preg_match('#duplex#iu', $title)) {
+                        continue;
+                    }
+                    $property->setTitle($title);
+
+                    // description
+
+                    $descriptionTag = $product->find('p[itemprop=description]');
+                    if (! $descriptionTag->count()) {
+                        throw new Exception('No description found: ' . $property->getLink());
+                    }
+                    $description = trim($descriptionTag[0]->innerHtml);
+                    // ONLY for ns-purchase
+                    if ($this->checkInstanceName('ns-purchase') && preg_match('#duplex#iu', $description)) {
+                        continue;
+                    }
+                    $property->setDescription($description);
 
                     // id
 
@@ -117,28 +143,12 @@ class OglasiPropertySource extends AbstractSource
                         }
                         $property->setDate(new \DateTime($dateTag[0]->getAttribute('datetime')));
 
-                        // title
-
-                        $titleTag = $product->find('a.fpogl-list-title h2');
-                        if (! $titleTag->count()) {
-                            throw new Exception('No title found');
-                        }
-                        $property->setTitle(trim($titleTag[0]->innerHtml));
-
                         // district
 
                         $categoryTags = $product->find('a[itemprop=category]');
                         if ($categoryTags->count() === 4) {
                             $property->setDistrict(trim($categoryTags[3]->innerHtml));
                         }
-
-                        // description
-
-                        $descriptionTag = $product->find('p[itemprop=description]');
-                        if (! $descriptionTag->count()) {
-                            throw new Exception('No description found: ' . $property->getLink());
-                        }
-                        $property->setDescription(trim($descriptionTag[0]->innerHtml));
 
                         // price
 

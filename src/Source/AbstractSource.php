@@ -98,6 +98,16 @@ abstract class AbstractSource implements SourceInterface
     }
 
     /**
+     * @param $instanceName
+     *
+     * @return bool
+     */
+    protected function checkInstanceName($instanceName): bool
+    {
+        return $this->instanceName === $instanceName;
+    }
+
+    /**
      * @param string $source
      * @param string $propertyId
      *
