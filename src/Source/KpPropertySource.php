@@ -347,10 +347,22 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#socijalno[a-z]*#iu', $text)) {
             return true;
         }
-        if (preg_match('#sajm|sajam#iu', $text)) {
+        if (preg_match('#(sajm)|(sajam)#iu', $text)) {
             return true;
         }
         if (preg_match('#podbar[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#[zž]elezni[cč]k[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#[zž].?\s+stanic[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#futog[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#jugovi[ćc]ev[a-z]*#iu', $text)) {
             return true;
         }
 
