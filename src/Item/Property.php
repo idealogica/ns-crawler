@@ -372,10 +372,11 @@ class Property implements ItemInterface
         foreach ($this->getPhoneNumbers() as $phoneNumber) {
             $phoneNumberLinks[] = '[' . $phoneNumber . '](tel:' . $phoneNumber .  ')';
         }
-        $price = null;
         $priceSqm = null;
-        if ($this->getPriceNumeric() && $this->getAreaNumeric()) {
-            $priceSqm = (int) ($this->getPriceNumeric() / $this->getAreaNumeric());
+        $price = $this->getPriceNumeric();
+        $area = $this->getAreaNumeric();
+        if ($price && $area) {
+            $priceSqm = (int) ($price / $area);
         }
         $string .= sprintf(
             "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s\n\n%s",
