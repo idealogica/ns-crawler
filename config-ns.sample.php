@@ -7,3 +7,5 @@ const PROXY_ADDRESS = 'sample';
 
 const KP_INDEX_URL = [];
 const OGLASI_INDEX_URL = [];
+
+const SQM_PRICE_OFFSET = 0;

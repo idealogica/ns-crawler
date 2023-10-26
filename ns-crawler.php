@@ -5,6 +5,7 @@
  */
 
 use Doctrine\ORM\EntityManager;
+use Idealogica\NsCrawler\Item\Property;
 use Idealogica\NsCrawler\Messenger\TelegramPropertyMessenger;
 use Idealogica\NsCrawler\Source\KpPropertySource;
 use Idealogica\NsCrawler\Source\OglasiPropertySource;
@@ -62,7 +63,21 @@ if (OGLASI_INDEX_URL) {
 // $sasomangeSource = new SasomangePropertySource($entityManager);
 // $sasomangeProperties = $sasomangeSource->fetchItems($sasomangeErrors);
 
+/**
+ * @var Property[] $properties
+ */
 $properties = array_merge($kpProperties, $oglasiProperties);
+
+if (SQM_PRICE_OFFSET) {
+    foreach ($properties as $idx => $property) {
+        if (! $property->getAreaNumeric() ||
+            ! $property->getPriceNumeric() ||
+            $property->getPriceNumeric() / $property->getAreaNumeric() > SQM_PRICE_OFFSET
+        ) {
+            unset($properties[$idx]);
+        }
+    }
+}
 
 if (! $properties) {
     if (! $silent) {

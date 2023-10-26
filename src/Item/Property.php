@@ -319,6 +319,28 @@ class Property implements ItemInterface
     }
 
     /**
+     * @return float|null
+     */
+    public function getPriceNumeric(): ?float
+    {
+        if ($this->getPrice() && preg_match('#([0-9.,]+)#i', $this->getPrice(), $priceMatches)) {
+            return (float) str_replace(',', '.', $priceMatches[1]);
+        }
+        return null;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAreaNumeric(): ?float
+    {
+        if ($this->getArea() && preg_match('#([0-9.,]+)#i', $this->getArea(), $priceMatches)) {
+            return (float) str_replace(',', '.', $priceMatches[1]);
+        }
+        return null;
+    }
+
+    /**
      * @return string
      */
     public function __toString()
@@ -352,16 +374,13 @@ class Property implements ItemInterface
         }
         $price = null;
         $priceSqm = null;
-        if ($this->getPrice() && preg_match('#([0-9.,]+)#i', $this->getPrice(), $priceMatches)) {
-            $price = $priceMatches[1];
-            if ($this->getArea() && preg_match('#([0-9.,]+)#i', $this->getArea(), $areaMatches)) {
-                $priceSqm = (int) ($price / $areaMatches[1]);
-            }
+        if ($this->getPriceNumeric() && $this->getAreaNumeric()) {
+            $priceSqm = (int) ($this->getPriceNumeric() / $this->getAreaNumeric());
         }
         $string .= sprintf(
             "\n*Price*: %s\n*Date*: %s\n*Phones*: %s\n\n%s\n\n%s",
             ($price ? $price . ' EUR' : '-') .
-            ($priceSqm ? (' (' . $priceSqm . ' EUR/M2' . ($priceSqm <= 2300 ? " \xE2\x9C\x85" : '') . ')') : ''),
+            ($priceSqm ? (' (' . $priceSqm . ' EUR/M2' . (SQM_PRICE_OFFSET && $priceSqm <= SQM_PRICE_OFFSET ? " \xE2\x9C\x85" : '') . ')') : ''),
             $this->getDate()->format('Y-m-d'),
             $phoneNumberLinks ? implode(', ', $phoneNumberLinks) : '-',
             $this->getDescription() ? $this->prepareMarkdown($this->getDescription()) : '-',

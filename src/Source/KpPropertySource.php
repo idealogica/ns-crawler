@@ -180,10 +180,11 @@ class KpPropertySource extends AbstractSource
 
                         // floor area
 
-                        if (preg_match('#([0-9]+)m#i', $text, $floorAreaMatches) ||
-                            preg_match('#([0-9]+)\s?m2#i', $text, $floorAreaMatches) ||
-                            preg_match('#([0-9]+)\s?kvadrat#i', $text, $floorAreaMatches) ||
-                            preg_match('#([0-9]+)\s?kvm#i', $text, $floorAreaMatches)
+                        if (preg_match('#([0-9]+)\s*m\s#i', $text, $floorAreaMatches) ||
+                            preg_match('#([0-9]+)\s*m\s*2#i', $text, $floorAreaMatches) ||
+                            preg_match('#([0-9]+)\s*kvadrat#i', $text, $floorAreaMatches) ||
+                            preg_match('#([0-9]+)\s*kvm#i', $text, $floorAreaMatches) ||
+                            preg_match('#([0-9]+)\s*sqm#i', $text, $floorAreaMatches)
                         ) {
                             $property->setArea($floorAreaMatches[1]);
                         }
