@@ -287,8 +287,10 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#(duplex)|(dupleks)#iu', $text)) {
             return true;
         }
-
         if (preg_match('#novo[a-z]*[\s\-]+nasel#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#n\.?\s*nasel#iu', $text)) {
             return true;
         }
         if (preg_match('#detelinar[a-z]*#iu', $text)) {
@@ -357,13 +359,58 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#[zž]elezni[cč]k[a-z]*#iu', $text)) {
             return true;
         }
-        if (preg_match('#[zž].?\s+stanic[a-z]*#iu', $text)) {
+        if (preg_match('#[zž]\.?\s*stanic[a-z]*#iu', $text)) {
             return true;
         }
         if (preg_match('#futog[a-z]*#iu', $text)) {
             return true;
         }
         if (preg_match('#jugovi[ćc]ev[a-z]*#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#vrdnik#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#ruma#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#temerin#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#sajlov#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#karaga[čc]#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#star[a-z]*\s+pazov#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#mi[šs]eluk#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#avijati[čc]arsko#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#lipov[a-z]*\s+gaj#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#vrbas#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#ba[čc]k[a-z]*\s+palank#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#obla[čc]ic[a-z]*\s+rad#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#futo[šs]k[a-z]*\s+put#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#kopaonik#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#[šs]arengrad#iu', $text)) {
             return true;
         }
 
