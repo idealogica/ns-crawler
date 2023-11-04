@@ -413,6 +413,12 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#[šs]arengrad#iu', $text)) {
             return true;
         }
+        if (preg_match('#sremsk[a-z]*\s+kamenic#iu', $text)) {
+            return true;
+        }
+        if (preg_match('#s\.?\s*kamenic#iu', $text)) {
+            return true;
+        }
 
         return false;
     }
