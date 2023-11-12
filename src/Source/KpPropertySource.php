@@ -170,9 +170,28 @@ class KpPropertySource extends AbstractSource
                             $property->setDescription(trim($description));
                         }
 
+                        // author
+
+                        $author = '';
+                        $authorContainerTags = $productDom->find('div[class]');
+                        foreach ($authorContainerTags as $authorContainerTag) {
+                            if (preg_match('#^UserSummary_userNameHolder#i', $authorContainerTag->getAttribute('class'))) {
+                                if (count($authorContainerTag->getChildren()) && $authorContainerTag->getChildren()[1]) {
+                                    $author = $authorContainerTag->getChildren()[1]->innerHtml;
+                                    break;
+                                }
+                            }
+                        }
+                        if (! $author) {
+                            throw new Exception('No author found: ' . $property->getLink());
+                        }
+                        $property->setAuthor($author);
+
                         // is agency
 
-                        $property->setAgency((bool) preg_match('#registr[a-z]*\s+posrednika#i', $property->getDescription()));
+                        $isAgencyDescription = (bool) preg_match('#registr[a-z]*\s+posrednika#i', $property->getDescription());
+                        $isAgencyAuthor = (bool) preg_match('#(trg)|(n\.)|(nekretine)|(group)|(ns[.\s]*group)#i', $author);
+                        $property->setAgency($isAgencyDescription || $isAgencyAuthor);
 
                         // property text
 
@@ -347,15 +366,15 @@ class KpPropertySource extends AbstractSource
         if (preg_match('#du[šs]an[a-z]*#iu', $text)) {
             return true;
         }
-        if (preg_match('#socijalno[a-z]*#iu', $text)) {
-            return true;
-        }
+        //if (preg_match('#socijalno[a-z]*#iu', $text)) {
+        //    return true;
+        //}
         if (preg_match('#(sajm)|(sajam)#iu', $text)) {
             return true;
         }
-        if (preg_match('#podbar[a-z]*#iu', $text)) {
-            return true;
-        }
+        //if (preg_match('#podbar[a-z]*#iu', $text)) {
+        //    return true;
+        //}
         if (preg_match('#[zž]elezni[cč]k[a-z]*#iu', $text)) {
             return true;
         }

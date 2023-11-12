@@ -90,11 +90,11 @@ class OglasiPropertySource extends AbstractSource
                     if (! $authorTag->count()) {
                         throw new Exception('No author found: ' . $property->getLink());
                     }
-                    // we skip ns-group ONLY for ns-purchase
-                    if ($this->checkInstanceName('ns-purchase') && preg_match('#ns.group#i', $authorTag[0]->innerHtml)) {
-                        continue;
-                    }
-                    $property->setAgency((bool) preg_match('#nekretnine#i', $authorTag[0]->innerHtml));
+                    $property->setAuthor($authorTag[0]->innerHtml);
+
+                    // is agency
+
+                    $property->setAgency((bool) preg_match('#(trg)|(nekretnine)|(ns[.\s]*group)|(group)#i', $property->getAuthor()));
 
                     // title
 

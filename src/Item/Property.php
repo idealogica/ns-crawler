@@ -29,6 +29,8 @@ class Property implements ItemInterface
 
     private ?string $description = null;
 
+    private ?string $author = null;
+
     private ?\DateTime $date;
 
     private array $phoneNumbers = [];
@@ -281,6 +283,25 @@ class Property implements ItemInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param string|null $author
+     *
+     * @return Property
+     */
+    public function setAuthor(?string $author): Property
+    {
+        $this->author = $author;
+        return $this;
+    }
+
+    /**
      * @return \DateTime|null
      */
     public function getDate(): ?\DateTime
@@ -367,6 +388,9 @@ class Property implements ItemInterface
         }
         if ($this->getDistrict()) {
             $string .= "\n*District*: " . $this->getDistrict();
+        }
+        if ($this->getAuthor()) {
+            $string .= "\n*Author*: " . $this->getAuthor();
         }
         $phoneNumberLinks = [];
         foreach ($this->getPhoneNumbers() as $phoneNumber) {

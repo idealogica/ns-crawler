@@ -76,6 +76,9 @@ if (SQM_PRICE_OFFSET) {
         ) {
             unset($properties[$idx]);
         }
+        if ($property->isAgency()) {
+            unset($properties[$idx]);
+        }
     }
 }
 
