@@ -17,7 +17,7 @@ class ScalewayServerOfferSource extends AbstractSource
 
     const SOURCE_NAME = 'scaleway.com';
 
-    const SESSION_RENEW_URL = 'https://api.scaleway.com/iam/v1alpha1/jwts/092c02d1-d7b7-4074-a515-f6bfb93de84a/renew';
+    const SESSION_RENEW_URL = 'https://api.scaleway.com/iam/v1alpha1/jwts/1111d2f9-091a-4c56-b9ce-97abba945581/renew';
 
     const URLS = [
         'fr-par-2' => 'https://api.scaleway.com/baremetal/v1/zones/fr-par-2/offers?subscription_period=monthly',
@@ -36,6 +36,7 @@ class ScalewayServerOfferSource extends AbstractSource
         'origin' => 'https://console.scaleway.com',
         'pragma' => 'no-cache',
         'referer' => 'https://console.scaleway.com/',
+        'content-type' => 'application/json; charset=utf-8',
     ];
 
     /**
@@ -106,7 +107,7 @@ class ScalewayServerOfferSource extends AbstractSource
                 'POST',
                 [
                     'headers' => self::PERSISTENT_HEADERS,
-                    'body' => '{"renew_token":"' . $setting->getValue() . '"}'
+                    'body' => '{"renew_token":"' . $setting->getValue() . '"}',
                 ]
             );
         } catch (Exception $e) {
