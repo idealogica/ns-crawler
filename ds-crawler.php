@@ -76,6 +76,7 @@ foreach ($psychzErrors as $error) {
 if ($errorText) {
     echo $errorText;
     file_put_contents('ds-crawler.log', $errorText);
+    exit (255);
 }
 
 if (! $silent) {

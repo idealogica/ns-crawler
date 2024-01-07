@@ -51,17 +51,19 @@ class ScalewayServerOfferSource extends AbstractSource
     public function fetchItems(array &$errors = []): array
     {
         $errors = [];
-        $serverOffers = [];
 
         $token = $this->getToken($errors);
+        if (! $token) {
+            $errors[] = new Exception('No token generated. Renew token needs to be updated');
+            return [];
+        }
 
-        if ($token) {
-            foreach (self::URLS as $zoneName => $zoneUrl) {
-                $serverOffers = array_merge(
-                    $serverOffers,
-                    $this->fetchZone($token, $zoneName, $zoneUrl, $errors)
-                );
-            }
+        $serverOffers = [];
+        foreach (self::URLS as $zoneName => $zoneUrl) {
+            $serverOffers = array_merge(
+                $serverOffers,
+                $this->fetchZone($token, $zoneName, $zoneUrl, $errors)
+            );
         }
 
         return $serverOffers;
