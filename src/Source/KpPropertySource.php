@@ -190,7 +190,7 @@ class KpPropertySource extends AbstractSource
                         // is agency
 
                         $isAgencyDescription = (bool) preg_match('#registr[a-z]*\s+posrednika#i', $property->getDescription());
-                        $isAgencyAuthor = (bool) preg_match('#(trg)|(n\.)|(nekretine)|(group)|(ns[.\s]*group)#i', $author);
+                        $isAgencyAuthor = (bool) preg_match('#(trg)|(n\.)|(nekretnine)|(group)|(ns[.\s]*group)#i', $author);
                         $property->setAgency($isAgencyDescription || $isAgencyAuthor);
 
                         // property text

@@ -17,7 +17,7 @@ class ScalewayServerOfferSource extends AbstractSource
 
     const SOURCE_NAME = 'scaleway.com';
 
-    const SESSION_RENEW_URL = 'https://api.scaleway.com/iam/v1alpha1/jwts/b9337428-f67b-463e-b0f5-ea18b8df8d74/renew';
+    const SESSION_RENEW_URL = 'https://api.scaleway.com/iam/v1alpha1/jwts/092c02d1-d7b7-4074-a515-f6bfb93de84a/renew';
 
     const URLS = [
         'fr-par-2' => 'https://api.scaleway.com/baremetal/v1/zones/fr-par-2/offers?subscription_period=monthly',

@@ -32,11 +32,13 @@ $psychzErrors = [];
 $scalewaySource = new ScalewayServerOfferSource($entityManager);
 $scalewayServerOffers = $scalewaySource->fetchItems($scalewayErrors);
 
-$mevspaceSource = new MevspaceServerOfferSource($entityManager);
-$mevspaceServerOffers = $mevspaceSource->fetchItems($mevspaceErrors);
+$mevspaceServerOffers = [];
+//$mevspaceSource = new MevspaceServerOfferSource($entityManager);
+//$mevspaceServerOffers = $mevspaceSource->fetchItems($mevspaceErrors);
 
-$psychzSource = new PsychzServerOfferSource($entityManager);
-$psychzServerOffers = $psychzSource->fetchItems($psychzErrors);
+$psychzServerOffers = [];
+//$psychzSource = new PsychzServerOfferSource($entityManager);
+//$psychzServerOffers = $psychzSource->fetchItems($psychzErrors);
 
 $serverOffers = array_merge($scalewayServerOffers, $mevspaceServerOffers, $psychzServerOffers);
 
