@@ -7,6 +7,10 @@ use Idealogica\NsCrawler\Item\ServerOffer;
 use Idealogica\NsCrawler\NetworkClientTrait;
 use Idealogica\NsCrawler\Settings;
 
+/**
+ * renew_token is sent as a part of a response
+ * of any Scaleway dashboard page
+ */
 class ScalewayServerOfferSource extends AbstractSource
 {
     use NetworkClientTrait;
@@ -100,7 +104,7 @@ class ScalewayServerOfferSource extends AbstractSource
     {
         $setting = $this->getScalewaySetting();
         if (! $setting) {
-            $errors[] = new \Exception('No scaleway setting found');;
+            $errors[] = new \Exception('No scaleway setting found');
             return null;
         }
         try {
