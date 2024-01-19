@@ -29,16 +29,17 @@ $psychzErrors = [];
 
 // parsing
 
+$scalewayServerOffers = [];
 $scalewaySource = new ScalewayServerOfferSource($entityManager);
 $scalewayServerOffers = $scalewaySource->fetchItems($scalewayErrors);
 
 $mevspaceServerOffers = [];
-//$mevspaceSource = new MevspaceServerOfferSource($entityManager);
-//$mevspaceServerOffers = $mevspaceSource->fetchItems($mevspaceErrors);
+$mevspaceSource = new MevspaceServerOfferSource($entityManager);
+$mevspaceServerOffers = $mevspaceSource->fetchItems($mevspaceErrors);
 
 $psychzServerOffers = [];
-//$psychzSource = new PsychzServerOfferSource($entityManager);
-//$psychzServerOffers = $psychzSource->fetchItems($psychzErrors);
+$psychzSource = new PsychzServerOfferSource($entityManager);
+$psychzServerOffers = $psychzSource->fetchItems($psychzErrors);
 
 $serverOffers = array_merge($scalewayServerOffers, $mevspaceServerOffers, $psychzServerOffers);
 

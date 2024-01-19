@@ -109,7 +109,7 @@ class MevspaceServerOfferSource extends AbstractSource
 
                     // link
 
-                    $linkTag = $product->find('a.btn-success');
+                    $linkTag = $product->find('span.btn-success');
                     if (! $linkTag->count()) {
                         throw new Exception('No mevspace link found');
                     }
